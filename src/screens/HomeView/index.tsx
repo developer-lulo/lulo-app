@@ -20,6 +20,24 @@ const CHARACTERS: CharacterProps[] = [
       'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
     isAvailable: false,
   },
+  {
+    name: 'Shikamaru',
+    avatar:
+      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
+    isAvailable: false,
+  },
+  {
+    name: 'Shikamaru',
+    avatar:
+      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
+    isAvailable: false,
+  },
+  {
+    name: 'Shikamaru',
+    avatar:
+      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
+    isAvailable: false,
+  },
 ];
 
 const HomeView = () => {
@@ -35,11 +53,23 @@ const HomeView = () => {
     <SafeAreaView edges={['top']} style={styles.container}>
       <HomeHeader />
 
-      <ScrollView horizontal={true}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{maxHeight: 90}}>
         {CHARACTERS.map(c => (
           <Character {...c} />
         ))}
       </ScrollView>
+
+      <View
+        style={{
+          height: 80,
+
+          width: 100,
+        }}>
+        <Text style={{color: 'black', fontSize: 40}}>hola</Text>
+      </View>
 
       <BottomSheet
         ref={bottomSheetRef}
