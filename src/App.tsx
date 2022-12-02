@@ -1,21 +1,24 @@
-import React from 'react';
-import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import {MAIN_BLACK, MAIN_GREEN_MINT} from './colors';
+import {ApolloProvider} from '@apollo/client';
+import React, {Fragment} from 'react';
+import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from 'react-native-safe-area-context';
+import Navigator from './router';
+import {client} from './services/ApolloService';
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? MAIN_BLACK : MAIN_GREEN_MINT,
-  };
-
+  // renders
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-    </SafeAreaView>
+    <Fragment>
+      <OrientationLocker orientation={PORTRAIT} />
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <ApolloProvider client={client}>
+          <Navigator />
+        </ApolloProvider>
+      </SafeAreaProvider>
+    </Fragment>
   );
 };
 
