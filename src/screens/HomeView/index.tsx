@@ -63,7 +63,16 @@ const HomeView = () => {
         ))}
       </ScrollView>
 
-      <CharacterDetail />
+      <CharacterDetail
+        {...{
+          actions: [],
+          avatar:
+            'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
+          description:
+            'Yo te puedo ayudar a recordar cosas que sean importantes para ti, incluso podré preveer algunas necesidades basadas en tus consultas',
+          name: 'Shikamaru',
+        }}
+      />
 
       <BottomSheet
         ref={bottomSheetRef}

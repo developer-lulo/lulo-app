@@ -19,7 +19,7 @@ const Character = (props: CharacterProps) => {
   return (
     <View style={styles.container}>
       <Image source={{uri: props.avatar}} style={styles.availableCharacter} />
-      <Text> {props.name}</Text>
+      <Text style={styles.name}> {props.name}</Text>
     </View>
   );
 };

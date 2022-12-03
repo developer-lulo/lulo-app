@@ -1,19 +1,12 @@
 import {View, Text} from 'react-native';
 import React from 'react';
+import styles from './styles';
 
 const HomeHeader = () => {
   return (
-    <View
-      style={{
-        paddingHorizontal: 10,
-      }}>
-      <Text
-        style={{
-          fontSize: 40,
-        }}>
-        Lulo
-      </Text>
-      <Text>Yo te ayudo</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Lulo</Text>
+      <Text style={styles.subtitle}>Yo te ayudo</Text>
     </View>
   );
 };

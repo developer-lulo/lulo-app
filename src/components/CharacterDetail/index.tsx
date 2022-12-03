@@ -17,15 +17,14 @@ const CharacterDetail = (props: Details) => {
         <View style={styles.infoContainer}>
           <View style={styles.basicInfo}>
             <Image
+              style={styles.avatar}
               source={{
                 uri: props.avatar,
               }}
             />
-            <Text>{props.name}</Text>
+            <Text style={styles.name}>{props.name}</Text>
           </View>
-          <View style={styles.description}>
-            <Text>{props.description}</Text>
-          </View>
+          <Text style={styles.description}>{props.description}</Text>
         </View>
         <View style={styles.actionsContainer}>
           {props.actions?.map((action, index) => {

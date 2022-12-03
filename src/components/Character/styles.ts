@@ -1,6 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {MAIN_GRAY, MAIN_WHITE_ALPHA} from '../../colors';
-import {DASHED_BORDER_WIDTH} from '../../constants';
+import {
+  DASHED_BORDER_WIDTH,
+  MAIN_FONT_FAMILY,
+  MAIN_SHADOW,
+} from '../../constants';
 
 const CHARACTER_AVATAR_SIZE = 60;
 
@@ -11,6 +15,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     margin: 5,
     marginHorizontal: 15,
+    ...MAIN_SHADOW,
   },
   unavailableCharacter: {
     width: CHARACTER_AVATAR_SIZE,
@@ -25,5 +30,9 @@ export default StyleSheet.create({
     width: CHARACTER_AVATAR_SIZE,
     height: CHARACTER_AVATAR_SIZE,
     borderRadius: 50,
+  },
+  name: {
+    fontFamily: MAIN_FONT_FAMILY,
+    color: MAIN_GRAY,
   },
 });
