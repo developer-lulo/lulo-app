@@ -18,4 +18,8 @@ export default StyleSheet.create({
     borderColor: MAIN_GRAY,
     backgroundColor: MAIN_WHITE_ALPHA,
   },
+  infoContainer: {},
+  basicInfo: {},
+  description: {},
+  actionsContainer: {},
 });
