@@ -6,6 +6,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
 import Character, {CharacterProps} from '../../components/Character';
 import {ScrollView} from 'react-native-gesture-handler';
+import CharacterDetail from '../../components/CharacterDetail';
 
 const CHARACTERS: CharacterProps[] = [
   {
@@ -62,14 +63,7 @@ const HomeView = () => {
         ))}
       </ScrollView>
 
-      <View
-        style={{
-          height: 80,
-
-          width: 100,
-        }}>
-        <Text style={{color: 'black', fontSize: 40}}>hola</Text>
-      </View>
+      <CharacterDetail />
 
       <BottomSheet
         ref={bottomSheetRef}
