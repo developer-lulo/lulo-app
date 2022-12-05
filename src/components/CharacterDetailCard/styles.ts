@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {MAIN_GRAY, MAIN_WHITE, MAIN_WHITE_ALPHA} from '../../colors';
-import {DASHED_BORDER_WIDTH} from '../../constants';
+import {DASHED_BORDER_WIDTH, MAIN_FONT_FAMILY} from '../../constants';
 
 export default StyleSheet.create({
   container: {
@@ -8,9 +8,10 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
+    flex: 1,
   },
   datailsContainer: {
-    height: 400,
+    flex: 1,
     width: '90%',
     borderWidth: DASHED_BORDER_WIDTH,
     borderStyle: 'dashed',
@@ -34,11 +35,18 @@ export default StyleSheet.create({
   name: {
     fontSize: 30,
     color: MAIN_GRAY,
+    fontFamily: MAIN_FONT_FAMILY,
   },
-  basicInfo: {},
+  basicInfo: {
+    display: 'flex',
+    justifyContent: 'center',
+    // backgroundColor: 'red',
+    alignItems: 'center',
+  },
   description: {
     width: '40%',
     color: MAIN_GRAY,
+    fontFamily: MAIN_FONT_FAMILY,
   },
   actionsContainer: {},
 });

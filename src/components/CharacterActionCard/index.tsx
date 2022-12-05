@@ -1,11 +1,15 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 
-export interface Action {
+export interface CharacterAction {
   icon: string;
 }
 
-const CharacterAction = (props: Action) => {
+export interface CharacterActionCardProps {
+  action: CharacterAction;
+}
+
+const CharacterAction = (props: CharacterActionCardProps) => {
   return (
     <View>
       <Text>CharacterAction</Text>

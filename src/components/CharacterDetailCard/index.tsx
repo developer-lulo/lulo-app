@@ -1,16 +1,19 @@
 import {Image, Text, View} from 'react-native';
 import React from 'react';
 import styles from './styles';
-import {Action} from '../CharacterAction';
+import {CharacterAction} from '../CharacterActionCard';
 
-export interface Details {
+export interface CharacterDetail {
   avatar: string;
   name: string;
   description: string;
-  actions: Action[];
+  actions: CharacterAction[];
+}
+export interface CharacterDetailCardProps {
+  details: CharacterDetail;
 }
 
-const CharacterDetail = (props: Details) => {
+const CharacterDetailCard = ({details}: CharacterDetailCardProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.datailsContainer}>
@@ -19,15 +22,15 @@ const CharacterDetail = (props: Details) => {
             <Image
               style={styles.avatar}
               source={{
-                uri: props.avatar,
+                uri: details.avatar,
               }}
             />
-            <Text style={styles.name}>{props.name}</Text>
+            <Text style={styles.name}>{details.name}</Text>
           </View>
-          <Text style={styles.description}>{props.description}</Text>
+          <Text style={styles.description}>{details.description}</Text>
         </View>
         <View style={styles.actionsContainer}>
-          {props.actions?.map((action, index) => {
+          {details.actions?.map((action, index) => {
             return <Text> Action {index} </Text>;
           })}
         </View>
@@ -36,4 +39,4 @@ const CharacterDetail = (props: Details) => {
   );
 };
 
-export default CharacterDetail;
+export default CharacterDetailCard;

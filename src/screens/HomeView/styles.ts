@@ -6,4 +6,10 @@ export default StyleSheet.create({
     backgroundColor: MAIN_GREEN_MINT,
     flex: 1,
   },
+  header: {
+    height: '25%',
+  },
+  detail: {
+    height: '50%',
+  },
 });

@@ -1,6 +1,6 @@
 export const DASHED_BORDER_WIDTH = 3;
 
-export const MAIN_FONT_FAMILY = 'Poppins';
+export const MAIN_FONT_FAMILY = 'Poppins-Regular';
 
 export const MAIN_SHADOW = {
   shadowColor: '#000',

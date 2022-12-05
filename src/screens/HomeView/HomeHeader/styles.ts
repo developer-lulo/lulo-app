@@ -5,6 +5,7 @@ import {MAIN_FONT_FAMILY} from '../../../constants';
 export default StyleSheet.create({
   container: {
     paddingHorizontal: 10,
+    marginBottom: 10,
   },
   title: {
     fontSize: 30,
