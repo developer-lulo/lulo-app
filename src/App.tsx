@@ -1,5 +1,5 @@
 import {ApolloProvider} from '@apollo/client';
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
 import {
   SafeAreaProvider,
@@ -7,8 +7,23 @@ import {
 } from 'react-native-safe-area-context';
 import Navigator from './router';
 import {client} from './services/ApolloService';
+import {isLoading, isSignedIn} from './services/GlobalVarService';
 
 const App = () => {
+  useEffect(() => {
+    async function init() {
+      setTimeout(() => {
+        isLoading(false);
+
+        // setTimeout(() => {
+        //   isSignedIn(true);
+        // }, 2000);
+      }, 3000);
+    }
+
+    init();
+  }, []);
+
   // renders
   return (
     <Fragment>
