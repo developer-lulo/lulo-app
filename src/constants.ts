@@ -4,7 +4,6 @@ export const DASHED_BORDER_WIDTH = 3;
 
 export const MAIN_FONT_FAMILY = 'Poppins-Regular';
 
-export const LOADER_GIF = require('./assets/gif/loader.gif');
 export const NEXT_ICON = require('./assets/images/signin-action-buttons/next.png');
 export const BACK_ICON = require('./assets/images/signin-action-buttons/back.png');
 

@@ -11,6 +11,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     backgroundColor: MAIN_GREEN_MINT,
+    flexDirection: 'row',
   },
   loader: {
     height: LOADER_SIZE,
@@ -20,5 +21,7 @@ export default StyleSheet.create({
     fontFamily: MAIN_FONT_FAMILY,
     color: MAIN_GRAY,
     fontSize: 15,
+    alignSelf: 'flex-end',
+    marginBottom: '20%',
   },
 });

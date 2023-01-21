@@ -8,10 +8,12 @@ import {
 import Navigator from './router';
 import {client} from './services/ApolloService';
 import {isLoading, isSignedIn} from './services/GlobalVarService';
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
   useEffect(() => {
     async function init() {
+      SplashScreen.hide();
       setTimeout(() => {
         isLoading(false);
 
