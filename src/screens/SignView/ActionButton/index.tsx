@@ -12,6 +12,7 @@ import {BACK_ICON, NEXT_ICON} from '../../../constants';
 interface ActionButtonProps {
   onPress?: Function;
   type: 'next' | 'back';
+  disabled?: boolean;
 }
 
 const ActionButton = (props: ActionButtonProps) => {
@@ -54,7 +55,10 @@ const ActionButton = (props: ActionButtonProps) => {
   }, [props.type]);
 
   return (
-    <TouchableOpacity onPress={_onPress} style={styles.container}>
+    <TouchableOpacity
+      onPress={_onPress}
+      style={[styles.container, props.disabled ? {opacity: 0.3} : null]}
+      disabled={props.disabled}>
       <Image source={getImage()} style={getStyle()} />
     </TouchableOpacity>
   );

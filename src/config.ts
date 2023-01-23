@@ -4,7 +4,7 @@ export const API_ENDPOINT = 'http://localhost:9000';
 
 const LOCAL_SETTINGS: ApolloSettings = {
   //   ws: 'wss://api.betql.co/graphql',
-  http: 'http://localhost:9000/graphql',
+  http: `${API_ENDPOINT}/graphql`,
 };
 
 // const PROD_SETTINGS: ApolloSettings = {

@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import Loading from './components/Loading';
 import HomeView from './screens/HomeView';
+import NewOrNotView from './screens/NewOrNotView';
 import SignView from './screens/SignView';
 import {isLoading, isSignedIn} from './services/GlobalVarService';
 
@@ -30,6 +31,7 @@ const Navigator = (_: NavigatorProps) => {
             </>
           ) : (
             <>
+              <RootStack.Screen name="NewOrNot" component={NewOrNotView} />
               <RootStack.Screen name="Sign" component={SignView} />
             </>
           )}

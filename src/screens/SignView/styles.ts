@@ -15,7 +15,6 @@ export default StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-
     height: '70%',
   },
   buttonsContainer: {
@@ -31,5 +30,18 @@ export default StyleSheet.create({
     color: MAIN_GRAY,
     fontSize: 25,
     alignSelf: 'flex-start',
+  },
+  hint: {
+    fontFamily: MAIN_FONT_FAMILY,
+    fontSize: 12,
+  },
+  errorHint: {
+    color: 'red',
+  },
+  title: {
+    fontFamily: MAIN_FONT_FAMILY,
+    color: MAIN_GRAY,
+    marginBottom: 50,
+    fontSize: 20,
   },
 });

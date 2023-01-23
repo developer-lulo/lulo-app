@@ -1,7 +1,7 @@
 import React, {Fragment, useCallback, useMemo, useRef, useState} from 'react';
 import {View, Text, Button} from 'react-native';
 import BottomSheet, {useBottomSheet} from '@gorhom/bottom-sheet';
-import HomeHeader from './HomeHeader';
+import HomeHeader from '../../components/HomeHeader';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
 import CharacterCard, {Character} from '../../components/CharacterCard';
