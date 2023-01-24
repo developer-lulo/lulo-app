@@ -7,8 +7,9 @@ import {
 } from 'react-native-safe-area-context';
 import Navigator from './router';
 import {client} from './services/ApolloService';
-import {isLoading, isSignedIn} from './services/GlobalVarService';
+import {isLoading} from './services/GlobalVarService';
 import SplashScreen from 'react-native-splash-screen';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 const App = () => {
   useEffect(() => {
@@ -16,10 +17,6 @@ const App = () => {
       SplashScreen.hide();
       setTimeout(() => {
         isLoading(false);
-
-        // setTimeout(() => {
-        //   isSignedIn(true);
-        // }, 2000);
       }, 3000);
     }
 
@@ -31,9 +28,11 @@ const App = () => {
     <Fragment>
       <OrientationLocker orientation={PORTRAIT} />
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-        <ApolloProvider client={client}>
-          <Navigator />
-        </ApolloProvider>
+        <BottomSheetModalProvider>
+          <ApolloProvider client={client}>
+            <Navigator />
+          </ApolloProvider>
+        </BottomSheetModalProvider>
       </SafeAreaProvider>
     </Fragment>
   );

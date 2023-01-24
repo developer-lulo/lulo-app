@@ -6,7 +6,7 @@ export const MAIN_FONT_FAMILY = 'Poppins-Regular';
 
 export const NEXT_ICON = require('./assets/images/signin-action-buttons/next.png');
 export const BACK_ICON = require('./assets/images/signin-action-buttons/back.png');
-
+export const DEFAULT_AVATAR = require('./assets/images/default-avatar.png');
 export const MAIN_SHADOW = {
   shadowColor: '#000',
   shadowOffset: {

@@ -1,29 +1,39 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Text, TextInput, View} from 'react-native';
+import {Alert, Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
 import HomeHeader from '../../components/HomeHeader';
 import {MAIN_INPUT_STYLE} from '../../constants';
 import ActionButton from './ActionButton';
-import {isSignedIn} from '../../services/GlobalVarService';
+import {authToken, isSignedIn} from '../../services/GlobalVarService';
+import {API_ENDPOINT} from '../../config';
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-const SignView = ({navigation, route}: any) => {
-  const {isNew} = route.params;
+interface AuthResult {
+  success: boolean;
+  data: {
+    token?: string;
+    error?: string;
+    rawErrorMessage?: string;
+  };
+}
 
-  const [email, setEmail] = useState<string | undefined>(undefined);
-  const [isAValidEmail, setIsAValidEmail] = useState(false);
+const SignView = ({navigation, route}: any) => {
+  const {isNewUser} = route.params;
+
+  const [email, setEmail] = useState<string | undefined>('Asd@qwe.com');
+  const [isAValidEmail, setIsAValidEmail] = useState(true);
   const onChangeEmail = (value: string) => {
     EMAIL_REGEX.exec(value) ? setIsAValidEmail(true) : setIsAValidEmail(false);
     setEmail(value);
   };
 
-  const [password, setPassword] = useState<string | undefined>(undefined);
-  const [isAValidPassword, setIsAValidPassword] = useState(false);
+  const [password, setPassword] = useState<string | undefined>('1234567890');
+  const [isAValidPassword, setIsAValidPassword] = useState(true);
   const onChangePassword = (value: string) => {
-    if (password?.length && password.length > 8) {
+    if (password?.length && password.length > 7) {
       setIsAValidPassword(true);
     } else {
       setIsAValidPassword(false);
@@ -31,9 +41,35 @@ const SignView = ({navigation, route}: any) => {
     setPassword(value);
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     // navigation.navigate('Home'); // we need to re render the stack navigator, so use the reactive var isSignedIn
     // isSignedIn(true);
+
+    const requestPath = isNewUser ? 'auth/signup' : 'auth/signin';
+
+    fetch(`${API_ENDPOINT}/${requestPath}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        password,
+        email,
+      }),
+    })
+      .then(response => response.json())
+      .then((result: AuthResult) => {
+        if (!result.success) {
+          throw new Error(result.data.rawErrorMessage);
+        }
+
+        authToken(result.data.token);
+        isSignedIn(true);
+      })
+      .catch(error => {
+        Alert.alert(error.message);
+      });
   };
 
   return (
@@ -43,7 +79,7 @@ const SignView = ({navigation, route}: any) => {
       </View>
       <View style={styles.formStyle}>
         <Text style={styles.title}>
-          {isNew ? 'Creemos tu cuenta' : 'Ingresemos para empezar'}
+          {isNewUser ? 'Creemos tu cuenta' : 'Ingresemos para empezar'}
         </Text>
         {/* Email Input */}
         <Text style={styles.labelStyle}> Correo </Text>

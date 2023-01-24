@@ -43,7 +43,7 @@ const CHARACTERS: Character[] = [
   },
 ];
 
-const HomeView = () => {
+const HomeView = ({navigation}: any) => {
   // bottom sheet needed
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['20%', '75%'], []);
@@ -54,7 +54,7 @@ const HomeView = () => {
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
       <View style={styles.header}>
-        <HomeHeader />
+        <HomeHeader navigation={navigation} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {CHARACTERS.map((c, index) => (
             <CharacterCard

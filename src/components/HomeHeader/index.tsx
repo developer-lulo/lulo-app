@@ -1,12 +1,37 @@
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import styles from './styles';
+import {DEFAULT_AVATAR} from '../../constants';
+import {useReactiveVar} from '@apollo/client';
+import {isSignedIn} from '../../services/GlobalVarService';
 
-const HomeHeader = () => {
+interface HomeHeaderProps {
+  navigation?: any;
+}
+
+const HomeHeader = ({navigation}: HomeHeaderProps) => {
+  const isSignedInReactive = useReactiveVar(isSignedIn);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Lulo</Text>
-      <Text style={styles.subtitle}>Yo te ayudo</Text>
+      <View style={styles.titlesContainer}>
+        <Text style={styles.title}>Lulo</Text>
+        <Text style={styles.subtitle}>Yo te ayudo</Text>
+      </View>
+      {isSignedInReactive ? (
+        <View>
+          <TouchableOpacity
+            style={styles.avatarContainer}
+            onPress={() => {
+              if (!navigation) {
+                console.log('Error: Navigation is not defined');
+              }
+              navigation.navigate('UserSettings');
+            }}>
+            <Image source={DEFAULT_AVATAR} />
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </View>
   );
 };

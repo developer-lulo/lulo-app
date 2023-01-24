@@ -6,6 +6,7 @@ import Loading from './components/Loading';
 import HomeView from './screens/HomeView';
 import NewOrNotView from './screens/NewOrNotView';
 import SignView from './screens/SignView';
+import UserSettingsView from './screens/UserSettingsView';
 import {isLoading, isSignedIn} from './services/GlobalVarService';
 
 interface NavigatorProps {}
@@ -24,15 +25,29 @@ const Navigator = (_: NavigatorProps) => {
         <RootStack.Navigator
           screenOptions={{
             headerShown: false,
+            presentation: 'modal',
           }}>
           {isSignedInReactive ? (
             <>
               <RootStack.Screen name="Home" component={HomeView} />
+              <RootStack.Screen
+                name="UserSettings"
+                component={UserSettingsView}
+                options={{
+                  presentation: 'modal',
+                }}
+              />
             </>
           ) : (
             <>
               <RootStack.Screen name="NewOrNot" component={NewOrNotView} />
-              <RootStack.Screen name="Sign" component={SignView} />
+              <RootStack.Screen
+                name="Sign"
+                component={SignView}
+                options={{
+                  presentation: 'card',
+                }}
+              />
             </>
           )}
         </RootStack.Navigator>
