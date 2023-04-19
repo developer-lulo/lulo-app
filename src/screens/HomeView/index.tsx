@@ -1,54 +1,53 @@
-import React, {Fragment, useCallback, useMemo, useRef, useState} from 'react';
-import {View, Text, Button} from 'react-native';
-import BottomSheet, {useBottomSheet} from '@gorhom/bottom-sheet';
-import HomeHeader from '../../components/HomeHeader';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {View} from 'react-native';
+import BottomSheet from '@gorhom/bottom-sheet';
+import HomeHeader from './HomeHeader';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
-import CharacterCard, {Character} from '../../components/CharacterCard';
+import CharacterCard from './CharacterCard';
 import {ScrollView} from 'react-native-gesture-handler';
-import CharacterDetailCard from '../../components/CharacterDetailCard';
+import CharacterDetailCard from './CharacterDetailCard';
 import {MAIN_SHADOW} from '../../constants';
-import ChatCard from '../../components/ChatCard';
+import ChatCard from './ChatCard';
+import {ChannelCharacter} from '../../gql/types';
+import {ApolloClient, useReactiveVar} from '@apollo/client';
+import {getMeQuery, initValuesQuery} from '../../services/UserService';
+import {channels, characters} from '../../services/GlobalVarService';
 
-const CHARACTERS: Character[] = [
-  {
-    name: 'Shikamaru',
-    avatar:
-      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
-    isAvailable: true,
-  },
-  {
-    name: 'Shikamaru',
-    avatar:
-      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
-    isAvailable: false,
-  },
-  {
-    name: 'Shikamaru',
-    avatar:
-      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
-    isAvailable: false,
-  },
-  {
-    name: 'Shikamaru',
-    avatar:
-      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
-    isAvailable: false,
-  },
-  {
-    name: 'Shikamaru',
-    avatar:
-      'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
-    isAvailable: false,
-  },
-];
+interface HomeProps {
+  client: ApolloClient<any>;
+  navigation: any;
+}
 
-const HomeView = ({navigation}: any) => {
+const HomeView = ({navigation, client}: HomeProps) => {
   // bottom sheet needed
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['20%', '75%'], []);
 
   const [openChats, setOpenChats] = useState(1);
+  const [characterSelected, setCharacterSelected] = useState<
+    ChannelCharacter | undefined
+  >();
+
+  // data states
+
+  const channelsReactive = useReactiveVar(channels);
+  const charactersReactive = useReactiveVar(characters);
+
+  useEffect(() => {
+    const initComponentAsync = async () => {
+      if (client) {
+        const data = await getMeQuery(client);
+
+        const initValues = await initValuesQuery(client, data.me.id);
+
+        channels(initValues.userChannels);
+        characters(initValues.channelCharacters);
+      }
+    };
+
+    initComponentAsync();
+  }, [client]);
 
   // renders
   return (
@@ -56,12 +55,15 @@ const HomeView = ({navigation}: any) => {
       <View style={styles.header}>
         <HomeHeader navigation={navigation} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {CHARACTERS.map((c, index) => (
+          {charactersReactive.map((c, index) => (
             <CharacterCard
               key={index}
               character={c}
               onPress={() => {
                 openChats === 1 ? setOpenChats(0) : setOpenChats(1);
+                openChats === 1
+                  ? setCharacterSelected(c)
+                  : setCharacterSelected(undefined);
               }}
             />
           ))}
@@ -69,16 +71,7 @@ const HomeView = ({navigation}: any) => {
       </View>
 
       <View style={styles.detail}>
-        <CharacterDetailCard
-          details={{
-            actions: [],
-            avatar:
-              'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
-            description:
-              'Yo te puedo ayudar a recordar cosas que sean importantes para ti, incluso podré preveer algunas necesidades basadas en tus consultas',
-            name: 'Shikamaru',
-          }}
-        />
+        <CharacterDetailCard character={characterSelected} />
       </View>
 
       <BottomSheet
@@ -87,15 +80,14 @@ const HomeView = ({navigation}: any) => {
         snapPoints={snapPoints}
         style={{...MAIN_SHADOW}}>
         <ScrollView>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
+          {channelsReactive.map(channel => (
             <ChatCard
-              key={i}
-              chat={{
-                avatar:
-                  'https://i.pinimg.com/736x/fc/9e/f7/fc9ef70e100fbc8fdf89a4a85d13315f.jpg',
-                chatName: 'Pendientes',
-                characterName: 'Shikamaru',
-                lastUpdate: new Date(),
+              key={channel.id}
+              chat={channel}
+              onPress={() => {
+                navigation.navigate('ChannelView', {
+                  channel,
+                });
               }}
             />
           ))}

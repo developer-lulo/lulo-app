@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_WHITE_ALPHA} from '../../colors';
+import {MAIN_GRAY, MAIN_WHITE_ALPHA} from '../../../colors';
 import {
   DASHED_BORDER_WIDTH,
   MAIN_FONT_FAMILY,
   MAIN_SHADOW,
-} from '../../constants';
+} from '../../../constants';
 
 const CHARACTER_AVATAR_SIZE = 60;
 

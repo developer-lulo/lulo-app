@@ -1,6 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {authToken, isSignedIn} from '../../services/GlobalVarService';
+import {isSignedIn} from '../../services/GlobalVarService';
 
 import styles from './styles';
 
@@ -11,8 +12,9 @@ const UserSettingsView = ({navigation}: any) => {
         <TouchableOpacity
           style={styles.item}
           onPress={() => {
-            authToken(undefined);
-            isSignedIn(false);
+            AsyncStorage.clear().then(_ => {
+              isSignedIn(false);
+            });
           }}>
           <Text style={styles.optionText}>Cerrar sesión</Text>
         </TouchableOpacity>

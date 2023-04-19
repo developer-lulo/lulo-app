@@ -2,9 +2,9 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import HomeHeader from '../../components/HomeHeader';
 import {MAIN_FONT_FAMILY, MAIN_SHADOW} from '../../constants';
 import styles from './styles';
+import HomeHeader from '../HomeView/HomeHeader';
 
 const NewOrNotView = ({navigation}: any) => {
   const onPress = (button: string) => {

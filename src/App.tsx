@@ -7,9 +7,11 @@ import {
 } from 'react-native-safe-area-context';
 import Navigator from './router';
 import {client} from './services/ApolloService';
-import {isLoading} from './services/GlobalVarService';
+import {isLoading, isSignedIn, userToken} from './services/GlobalVarService';
 import SplashScreen from 'react-native-splash-screen';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Confetti from './components/Confetti/Index';
 
 const App = () => {
   useEffect(() => {
@@ -18,6 +20,12 @@ const App = () => {
       setTimeout(() => {
         isLoading(false);
       }, 3000);
+
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        isSignedIn(true);
+        userToken(token);
+      }
     }
 
     init();
@@ -30,8 +38,9 @@ const App = () => {
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <BottomSheetModalProvider>
           <ApolloProvider client={client}>
-            <Navigator />
+            <Navigator client={client} />
           </ApolloProvider>
+          <Confetti />
         </BottomSheetModalProvider>
       </SafeAreaProvider>
     </Fragment>

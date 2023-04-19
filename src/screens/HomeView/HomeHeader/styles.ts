@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_GREEN_MINT} from '../../colors';
-import {MAIN_FONT_FAMILY, MAIN_SHADOW} from '../../constants';
+import {MAIN_GRAY} from '../../../colors';
+import {MAIN_FONT_FAMILY, MAIN_SHADOW} from '../../../constants';
 
 export default StyleSheet.create({
   container: {

@@ -1,9 +1,10 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
 import styles from './styles';
-import {DEFAULT_AVATAR} from '../../constants';
+
 import {useReactiveVar} from '@apollo/client';
-import {isSignedIn} from '../../services/GlobalVarService';
+import {isSignedIn} from '../../../services/GlobalVarService';
+import {DEFAULT_AVATAR} from '../../../constants';
 
 interface HomeHeaderProps {
   navigation?: any;

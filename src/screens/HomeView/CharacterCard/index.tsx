@@ -1,21 +1,17 @@
 import React from 'react';
 import {Image, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
+import {ChannelCharacter} from '../../../gql/types';
 import styles from './styles';
 
-export interface Character {
-  name: string;
-  avatar: string;
-  isAvailable: boolean;
-}
-
 export interface CharacterCardProps {
-  character: Character;
+  character: ChannelCharacter;
   onPress?: Function;
 }
 
 const CharacterCard = ({character, onPress}: CharacterCardProps) => {
-  if (!character.isAvailable) {
+  // if (!character.isAvailable) {
+  if (!character) {
     return (
       <View style={styles.container}>
         <View style={styles.unavailableCharacter} />
@@ -32,10 +28,10 @@ const CharacterCard = ({character, onPress}: CharacterCardProps) => {
   return (
     <TouchableOpacity style={styles.container} onPress={_onPress}>
       <Image
-        source={{uri: character.avatar}}
+        source={{uri: character.imageUrl}}
         style={styles.availableCharacter}
       />
-      <Text style={styles.name}> {character.name}</Text>
+      <Text style={styles.name}> {character.displayName}</Text>
     </TouchableOpacity>
   );
 };

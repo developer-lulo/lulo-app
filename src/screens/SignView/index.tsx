@@ -3,11 +3,12 @@ import {Alert, Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
-import HomeHeader from '../../components/HomeHeader';
 import {MAIN_INPUT_STYLE} from '../../constants';
 import ActionButton from './ActionButton';
-import {authToken, isSignedIn} from '../../services/GlobalVarService';
+import {isSignedIn, userToken} from '../../services/GlobalVarService';
 import {API_ENDPOINT} from '../../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import HomeHeader from '../HomeView/HomeHeader';
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -23,14 +24,16 @@ interface AuthResult {
 const SignView = ({navigation, route}: any) => {
   const {isNewUser} = route.params;
 
-  const [email, setEmail] = useState<string | undefined>('Asd@qwe.com');
+  const [email, setEmail] = useState<string | undefined>(
+    'felipemantillagomez@gmail.com',
+  );
   const [isAValidEmail, setIsAValidEmail] = useState(true);
   const onChangeEmail = (value: string) => {
     EMAIL_REGEX.exec(value) ? setIsAValidEmail(true) : setIsAValidEmail(false);
     setEmail(value);
   };
 
-  const [password, setPassword] = useState<string | undefined>('1234567890');
+  const [password, setPassword] = useState<string | undefined>('12345678');
   const [isAValidPassword, setIsAValidPassword] = useState(true);
   const onChangePassword = (value: string) => {
     if (password?.length && password.length > 7) {
@@ -64,8 +67,13 @@ const SignView = ({navigation, route}: any) => {
           throw new Error(result.data.rawErrorMessage);
         }
 
-        authToken(result.data.token);
-        isSignedIn(true);
+        if (result.data.token) {
+          // To save it and check it on App.tsx init()
+          AsyncStorage.setItem('token', result.data.token).then(_ => {
+            userToken(result.data.token); // to be used inside the code
+            isSignedIn(true); // to refresh the router and redirect to Home Screen
+          });
+        }
       })
       .catch(error => {
         Alert.alert(error.message);

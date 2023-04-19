@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY} from '../../colors';
-import {MAIN_FONT_FAMILY} from '../../constants';
-
+import {MAIN_GRAY} from '../../../colors';
+import {MAIN_FONT_FAMILY} from '../../../constants';
 const AVATAR_SIZE = 60;
 
 export default StyleSheet.create({
@@ -45,5 +44,6 @@ export default StyleSheet.create({
   },
   date: {
     fontFamily: MAIN_FONT_FAMILY,
+    color: MAIN_GRAY,
   },
 });

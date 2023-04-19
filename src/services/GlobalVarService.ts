@@ -1,5 +1,7 @@
 import {makeVar} from '@apollo/client';
 
+import {Channel, ChannelCharacter, Message, User} from '../gql/types';
+
 export const isSignedIn = makeVar<boolean>(false);
 
 // loading screen
@@ -7,4 +9,21 @@ export const isLoading = makeVar<boolean>(true);
 export const loaderMessage = makeVar<string | null | undefined>(null);
 
 // user props
-export const authToken = makeVar<string | undefined>(undefined);
+export const userToken = makeVar<string | null | undefined>(null);
+export const me = makeVar<User | undefined>(undefined);
+
+// app props
+export const channels = makeVar<Channel[]>([]);
+export const characters = makeVar<ChannelCharacter[]>([]);
+
+// channel props
+export const messages = makeVar<Message[]>([]);
+
+// functionalities
+
+export const showConfetti = makeVar<Boolean>(false);
+export interface ConfettiPositionInput {
+  x: number;
+  y: number;
+}
+export const confettiPosition = makeVar<ConfettiPositionInput>({x: 0, y: 0});

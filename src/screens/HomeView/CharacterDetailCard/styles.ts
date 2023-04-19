@@ -1,6 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_WHITE, MAIN_WHITE_ALPHA} from '../../colors';
-import {DASHED_BORDER_WIDTH, MAIN_FONT_FAMILY} from '../../constants';
+import {MAIN_GRAY, MAIN_WHITE, MAIN_WHITE_ALPHA} from '../../../colors';
+import {
+  DASHED_BORDER_WIDTH,
+  MAIN_FONT_FAMILY,
+  MAIN_SHADOW,
+} from '../../../constants';
 
 export default StyleSheet.create({
   container: {
@@ -22,31 +26,55 @@ export default StyleSheet.create({
   infoContainer: {
     display: 'flex',
     flexDirection: 'row',
-    padding: 20,
+    padding: 10,
     justifyContent: 'space-between',
+    height: '60%',
+    maxHeight: '60%',
   },
   avatar: {
-    width: 150,
-    height: 150,
+    width: 130,
+    height: 130,
     borderRadius: 100,
     borderWidth: 5,
     borderColor: MAIN_WHITE,
   },
   name: {
-    fontSize: 30,
+    fontSize: 20,
     color: MAIN_GRAY,
     fontFamily: MAIN_FONT_FAMILY,
+    textAlign: 'center',
   },
   basicInfo: {
     display: 'flex',
-    justifyContent: 'center',
-    // backgroundColor: 'red',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    maxWidth: '40%',
   },
   description: {
-    width: '40%',
     color: MAIN_GRAY,
     fontFamily: MAIN_FONT_FAMILY,
+    maxWidth: '60%',
+    textAlign: 'center',
   },
-  actionsContainer: {},
+  actionsContainer: {
+    paddingHorizontal: 20,
+    display: 'flex',
+    justifyContent: 'center',
+
+    height: '40%',
+  },
+  createChannelButton: {
+    height: 60,
+    minWidth: 60,
+    borderRadius: 20,
+    backgroundColor: MAIN_WHITE,
+    ...MAIN_SHADOW,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconStyle: {
+    color: MAIN_GRAY,
+    fontSize: 20,
+  },
 });

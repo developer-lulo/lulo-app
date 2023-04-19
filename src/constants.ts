@@ -4,9 +4,17 @@ export const DASHED_BORDER_WIDTH = 3;
 
 export const MAIN_FONT_FAMILY = 'Poppins-Regular';
 
+// Big Buttons (forms ETC)
 export const NEXT_ICON = require('./assets/images/signin-action-buttons/next.png');
 export const BACK_ICON = require('./assets/images/signin-action-buttons/back.png');
+
 export const DEFAULT_AVATAR = require('./assets/images/default-avatar.png');
+
+// little Buttons (Headers)
+export const HEADER_BACK_BUTTON = require('./assets/images/header-action-buttons/back.png');
+export const SEND_MESSAGE_ICON = require('./assets/images/channel-buttons/send.png');
+export const TASK_CHECK_ICON = require('./assets/images/channel-buttons/task-check.png');
+
 export const MAIN_SHADOW = {
   shadowColor: '#000',
   shadowOffset: {
@@ -22,8 +30,9 @@ export const MAIN_INPUT_STYLE = {
   padding: 20,
   backgroundColor: 'white',
   borderRadius: 50,
-  margin: 10,
   width: '100%',
   fontFamily: MAIN_FONT_FAMILY,
   color: MAIN_GRAY,
 };
+
+export const TEST_MODE = false;
