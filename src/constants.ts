@@ -14,6 +14,7 @@ export const DEFAULT_AVATAR = require('./assets/images/default-avatar.png');
 export const HEADER_BACK_BUTTON = require('./assets/images/header-action-buttons/back.png');
 export const SEND_MESSAGE_ICON = require('./assets/images/channel-buttons/send.png');
 export const TASK_CHECK_ICON = require('./assets/images/channel-buttons/task-check.png');
+export const DELETE_TASK_ICON = require('./assets/images/channel-buttons/delete-task.png');
 
 export const MAIN_SHADOW = {
   shadowColor: '#000',

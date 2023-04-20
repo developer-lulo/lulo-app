@@ -1,55 +1,51 @@
 import {
   GestureResponderEvent,
   Image,
+  ImageSourcePropType,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {Animated} from 'react-native';
 import CircularProgress from '../../../../components/CircularProgress';
 import {TASK_CHECK_ICON} from '../../../../constants';
 import {View} from 'react-native-animatable';
-import {MAIN_BAD_RED, MAIN_CHECK_GREEN, MAIN_GRAY} from '../../../../colors';
-import {Message} from '../../../../gql/types';
-import {ChannelMessageStatus} from '../../../../gql/types';
+import {MAIN_CHECK_GREEN, MAIN_GRAY} from '../../../../colors';
 
 export interface TaskMessageActionOnPressEvent {
   pageX: number;
   pageY: number;
 }
 
-const TaskTypes = {
-  [ChannelMessageStatus.Pending]: {
-    icon: TASK_CHECK_ICON,
-    color: MAIN_GRAY,
-    animationColor: MAIN_CHECK_GREEN,
-  },
-  [ChannelMessageStatus.Done]: {
-    icon: TASK_CHECK_ICON,
-    color: MAIN_CHECK_GREEN,
-    animationColor: MAIN_CHECK_GREEN,
-  },
-  [ChannelMessageStatus.Stored]: {
-    icon: TASK_CHECK_ICON,
-    color: MAIN_BAD_RED,
-    animationColor: MAIN_BAD_RED,
-  },
-};
-
-interface TaskMessageActionProps {
+export interface TaskMessageActionProps {
   size?: number;
   animationTime?: number;
-  animationColor?: string;
-  onPress: Function;
-  messageStatus: ChannelMessageStatus;
+  colors?: {
+    animationIconColor?: string;
+    animationStrokeColor?: string;
+    iconColor?: string;
+    strokeColor?: string;
+  };
+  icon?: ImageSourcePropType;
+  onPress?: Function;
+  onAnimationEnd?: Function;
 }
 const TaskMessageAction = ({
   size = 32,
   animationTime = 3000,
-  onPress = (event: TaskMessageActionOnPressEvent) => {
-    console.warn('onPress event not found', event);
+  colors = {
+    animationIconColor: MAIN_CHECK_GREEN,
+    animationStrokeColor: MAIN_CHECK_GREEN,
+    iconColor: MAIN_GRAY,
+    strokeColor: MAIN_GRAY,
   },
-  messageStatus,
+  icon = TASK_CHECK_ICON,
+  onPress = (event: TaskMessageActionOnPressEvent) => {
+    console.warn('onPress handler not found', event);
+  },
+  onAnimationEnd = () => {
+    console.warn('onAnimationEnd handler not found');
+  },
 }: TaskMessageActionProps) => {
   const anim = useRef(new Animated.Value(0)).current;
 
@@ -76,6 +72,7 @@ const TaskMessageAction = ({
     }).start(() => {
       anim.setValue(0);
       setShowProgress(false);
+      _onAnimationEnd();
     });
   };
 
@@ -84,13 +81,13 @@ const TaskMessageAction = ({
     onPress({pageX, pageY});
   };
 
-  const getColors = useCallback(() => {
-    if (messageStatus) {
-      return showProgress
-        ? TaskTypes[messageStatus].animationColor
-        : TaskTypes[messageStatus].color;
-    }
-  }, [messageStatus, showProgress]);
+  const _onAnimationEnd = async () => {
+    onAnimationEnd();
+  };
+
+  const getIconColor = useMemo(() => {
+    return showProgress ? colors.animationIconColor : colors.iconColor;
+  }, [showProgress, colors.animationIconColor, colors.iconColor]);
 
   return (
     <View style={{...styles.container, height: size, width: size}}>
@@ -103,16 +100,17 @@ const TaskMessageAction = ({
               ...styles.icon,
               height: size / 1.7,
               width: size / 1.7,
-              tintColor: getColors(),
+              tintColor: getIconColor,
             }}
-            source={TASK_CHECK_ICON}
+            source={icon}
           />
         ) : null}
       </TouchableOpacity>
       {showProgress ? (
         <>
           <CircularProgress
-            strokeProgressColor={getColors()}
+            strokeProgressColor={colors.animationStrokeColor}
+            strokeColor={colors.strokeColor}
             size={size}
             strokeWidth={2}
             progress={progress}
@@ -122,9 +120,9 @@ const TaskMessageAction = ({
               ...styles.icon,
               height: size / 1.7,
               width: size / 1.7,
-              tintColor: getColors(),
+              tintColor: getIconColor,
             }}
-            source={TASK_CHECK_ICON}
+            source={icon}
           />
         </>
       ) : null}

@@ -21,6 +21,8 @@ export default StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
   },
   buttonIcon: {
     width: 24,

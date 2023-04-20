@@ -1,7 +1,7 @@
 import {ApolloSettings} from './services/ApolloService';
 
-export const API_ENDPOINT = 'http://localhost:9000';
-// export const API_ENDPOINT = 'https://api.lulo.services';
+// export const API_ENDPOINT = 'http://localhost:9000';
+export const API_ENDPOINT = 'https://api.lulo.services';
 
 const LOCAL_SETTINGS: ApolloSettings = {
   //   ws: 'wss://api.betql.co/graphql',

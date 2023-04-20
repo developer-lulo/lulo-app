@@ -1,15 +1,10 @@
 import {
   Text,
   TouchableOpacity,
-  Image,
-  GestureResponderEvent,
   StyleProp,
-  ImageStyle,
   ViewStyle,
   TextStyle,
-  ActivityIndicator,
   View,
-  Alert,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import styles from './styles';
@@ -23,6 +18,7 @@ import {Dimensions} from 'react-native';
 
 import {
   confettiPosition,
+  messages,
   showConfetti,
 } from '../../../../services/GlobalVarService';
 import {
@@ -34,16 +30,41 @@ import {
 } from '../../../../colors';
 import {ApolloClient} from '@apollo/client';
 import {changeMessageStatus} from '../../../../services/MessagesService';
-import Action from '../../../TestView/action';
+
 import TaskMessageAction, {
   TaskMessageActionOnPressEvent,
-  TaskMessageActionType,
+  TaskMessageActionProps,
 } from './TaskMessageAction';
+import {DELETE_TASK_ICON} from '../../../../constants';
 
 interface TaskMessageProps {
   message: Message;
   client: ApolloClient<any>;
 }
+
+const deleteButton: Pick<TaskMessageActionProps, 'colors' | 'icon'> = {
+  colors: {
+    animationIconColor: MAIN_BAD_RED,
+    animationStrokeColor: MAIN_BAD_RED,
+    iconColor: MAIN_GRAY,
+  },
+  icon: DELETE_TASK_ICON,
+};
+
+const checkButton: Pick<TaskMessageActionProps, 'colors'> = {
+  colors: {
+    animationIconColor: MAIN_GRAY,
+    animationStrokeColor: MAIN_CHECK_GREEN,
+    iconColor: MAIN_GRAY,
+  },
+};
+const uncheckButton: Pick<TaskMessageActionProps, 'colors'> = {
+  colors: {
+    animationIconColor: MAIN_CHECK_GREEN,
+    animationStrokeColor: MAIN_GRAY,
+    iconColor: MAIN_CHECK_GREEN,
+  },
+};
 
 const TaskMessage = ({message, client}: TaskMessageProps) => {
   const {text} = message;
@@ -51,24 +72,6 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
   const [messageStatus, setMessageStatus] = useState<ChannelMessageStatus>(
     message.messageStatus || ChannelMessageStatus.Pending,
   );
-
-  const getIconStyles = useCallback((): StyleProp<ImageStyle> => {
-    const iconStyles: StyleProp<ImageStyle> = {
-      ...styles.buttonIcon,
-      position: 'absolute',
-      zIndex: 1,
-    };
-
-    if (messageStatus === ChannelMessageStatus.Pending) {
-      iconStyles.tintColor = MAIN_GRAY;
-    } else if (messageStatus === ChannelMessageStatus.Done) {
-      iconStyles.tintColor = MAIN_CHECK_GREEN;
-    } else if (messageStatus === ChannelMessageStatus.Stored) {
-      iconStyles.tintColor = MAIN_BAD_RED;
-    }
-
-    return iconStyles;
-  }, [messageStatus]);
 
   const getCardStyles = useCallback((): StyleProp<ViewStyle> => {
     const cardStyles: StyleProp<ViewStyle> = {
@@ -98,39 +101,82 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
     return textStyle;
   }, [messageStatus]);
 
-  const handleOnPress = async (event: TaskMessageActionOnPressEvent) => {
-    // send mutation to update the task
-
-    const newStatus =
-      messageStatus === ChannelMessageStatus.Done
-        ? ChannelMessageStatus.Pending
-        : ChannelMessageStatus.Done;
-
+  // Check Task Methods
+  // the check task start the animation and when finishing fires the mutation
+  const handleCheckTask = async (event: TaskMessageActionOnPressEvent) => {
+    // set confetti config
+    const {height} = Dimensions.get('window');
+    const {pageX: x, pageY: y} = event;
+    confettiPosition({x, y: height - y});
+    showConfetti(true);
+  };
+  const onCheckAnimationEnd = async () => {
     const input: ChangeMessageStatusInput = {
       messageId: message.id!,
-      messageStatus: newStatus,
+      messageStatus: ChannelMessageStatus.Done,
     };
     const updatedMessage = await changeMessageStatus(client, input);
 
     setMessageStatus(updatedMessage.messageStatus!);
-    // set confetti config
+  };
 
-    if (updatedMessage.messageStatus === ChannelMessageStatus.Done) {
-      const {height} = Dimensions.get('window');
-      const {pageX: x, pageY: y} = event;
-      confettiPosition({x, y: height - y});
-      showConfetti(true);
-    }
+  // Check Task Methods
+  // the check task start the animation and when finishing fires the mutation
+  const handleUncheckTask = async (_: TaskMessageActionOnPressEvent) => {};
+  const onUncheckAnimationEnd = async () => {
+    const input: ChangeMessageStatusInput = {
+      messageId: message.id!,
+      messageStatus: ChannelMessageStatus.Pending,
+    };
+    const updatedMessage = await changeMessageStatus(client, input);
+
+    setMessageStatus(updatedMessage.messageStatus!);
+  };
+
+  const handleDeleteTask = async (_: TaskMessageActionOnPressEvent) => {};
+  const onDeleteAnimationEnd = async () => {
+    const input: ChangeMessageStatusInput = {
+      messageId: message.id!,
+      messageStatus: ChannelMessageStatus.Stored,
+    };
+    await changeMessageStatus(client, input);
+
+    const currentMessages = [...messages()];
+    messages(currentMessages.filter(m => m.id !== message.id));
   };
 
   return (
-    <TouchableOpacity style={getCardStyles()}>
+    <TouchableOpacity
+      style={getCardStyles()}
+      onPress={() => {
+        console.log(message);
+      }}>
       <Text style={getTextStyles()}>{text}</Text>
       <View style={styles.button}>
-        <TaskMessageAction
-          onPress={handleOnPress}
-          messageStatus={messageStatus}
-        />
+        {messageStatus === ChannelMessageStatus.Done ? (
+          <TaskMessageAction
+            onPress={handleDeleteTask}
+            colors={deleteButton.colors}
+            icon={deleteButton.icon}
+            animationTime={1000}
+            onAnimationEnd={onDeleteAnimationEnd}
+          />
+        ) : null}
+        {messageStatus === ChannelMessageStatus.Done ? (
+          <TaskMessageAction
+            onPress={handleUncheckTask}
+            colors={uncheckButton.colors}
+            animationTime={1000}
+            onAnimationEnd={onUncheckAnimationEnd}
+          />
+        ) : (
+          <TaskMessageAction
+            onPress={handleCheckTask}
+            colors={checkButton.colors}
+            animationTime={1000}
+            onAnimationEnd={onCheckAnimationEnd}
+          />
+        )}
       </View>
     </TouchableOpacity>
   );
