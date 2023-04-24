@@ -47,7 +47,7 @@ const MessageComposer = ({channel, client}: MessageComposerProps) => {
         keyboardType="default"
       />
       <View style={styles.actionsContainer}>
-        <TouchableOpacity onPress={sendMessage}>
+        <TouchableOpacity onPress={sendMessage} style={styles.action}>
           <Image source={SEND_MESSAGE_ICON} />
         </TouchableOpacity>
       </View>

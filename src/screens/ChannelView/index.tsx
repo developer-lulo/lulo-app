@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {ScrollView, View} from 'react-native';
+import {Alert, ScrollView, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
 import {Channel} from '../../gql/types';
@@ -29,8 +29,15 @@ const ChannelView = ({client}: ChannelViewProps) => {
   useEffect(() => {
     const initComponentAsync = async () => {
       if (client) {
-        const data = await getChannelMessages(client, params.channel.id);
-        messages(data);
+        const data = await getChannelMessages(client, params.channel.id).catch(
+          error => {
+            Alert.alert(error.message);
+          },
+        );
+
+        if (data) {
+          messages(data);
+        }
       }
     };
 

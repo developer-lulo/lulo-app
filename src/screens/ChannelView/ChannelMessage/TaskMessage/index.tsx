@@ -1,11 +1,4 @@
-import {
-  Text,
-  TouchableOpacity,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-  View,
-} from 'react-native';
+import {Text, StyleProp, ViewStyle, TextStyle, View, Alert} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import styles from './styles';
 import {
@@ -115,9 +108,15 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
       messageId: message.id!,
       messageStatus: ChannelMessageStatus.Done,
     };
-    const updatedMessage = await changeMessageStatus(client, input);
+    const updatedMessage = await changeMessageStatus(client, input).catch(
+      error => {
+        Alert.alert(error.message);
+      },
+    );
 
-    setMessageStatus(updatedMessage.messageStatus!);
+    if (updatedMessage && updatedMessage.messageStatus) {
+      setMessageStatus(updatedMessage.messageStatus);
+    }
   };
 
   // Check Task Methods
@@ -128,9 +127,14 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
       messageId: message.id!,
       messageStatus: ChannelMessageStatus.Pending,
     };
-    const updatedMessage = await changeMessageStatus(client, input);
-
-    setMessageStatus(updatedMessage.messageStatus!);
+    const updatedMessage = await changeMessageStatus(client, input).catch(
+      error => {
+        Alert.alert(error.message);
+      },
+    );
+    if (updatedMessage && updatedMessage.messageStatus) {
+      setMessageStatus(updatedMessage.messageStatus);
+    }
   };
 
   const handleDeleteTask = async (_: TaskMessageActionOnPressEvent) => {};
@@ -139,19 +143,19 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
       messageId: message.id!,
       messageStatus: ChannelMessageStatus.Stored,
     };
-    await changeMessageStatus(client, input);
+    await changeMessageStatus(client, input).catch(error => {
+      Alert.alert(error.message);
+    });
 
     const currentMessages = [...messages()];
     messages(currentMessages.filter(m => m.id !== message.id));
   };
 
   return (
-    <TouchableOpacity
-      style={getCardStyles()}
-      onPress={() => {
-        console.log(message);
-      }}>
-      <Text style={getTextStyles()}>{text}</Text>
+    <View style={getCardStyles()}>
+      <Text style={getTextStyles()} numberOfLines={1}>
+        {text}
+      </Text>
       <View style={styles.button}>
         {messageStatus === ChannelMessageStatus.Done ? (
           <TaskMessageAction
@@ -178,7 +182,7 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
           />
         )}
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

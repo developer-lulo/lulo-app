@@ -5,7 +5,6 @@ import {
   CHANGE_MESSAGE_STATUS,
   ChangeMessageStatusResult,
 } from '../gql/mutations';
-import {Alert} from 'react-native';
 
 export const changeMessageStatus = async (
   client: ApolloClient<any>,
@@ -20,7 +19,8 @@ export const changeMessageStatus = async (
   });
 
   if (result.errors) {
-    Alert.alert(result.errors[0].message);
+    console.error(result.errors);
+    throw new Error(result.errors[0].message);
   }
 
   const message: ChangeMessageStatusResult = result.data;
