@@ -1,4 +1,4 @@
-import {View, Text, TextInput} from 'react-native';
+import {View, Text, TextInput, KeyboardAvoidingView} from 'react-native';
 import React, {useState} from 'react';
 import styles from './styles';
 import {ApolloClient} from '@apollo/client';
@@ -52,7 +52,10 @@ const CreateChannelView = ({client, navigation}: CreateChannelViewProps) => {
   const [name, setName] = useState<string>('');
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior="padding"
+      keyboardVerticalOffset={50}>
       <View style={styles.formStyle}>
         <Text style={styles.labelStyle}> Nombre del chat </Text>
         <TextInput
@@ -75,7 +78,7 @@ const CreateChannelView = ({client, navigation}: CreateChannelViewProps) => {
         />
         <ActionButton type="next" onPress={onSubmit} />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

@@ -24,6 +24,7 @@ export default StyleSheet.create({
   },
   labelStyle: {
     fontFamily: MAIN_FONT_FAMILY,
+    marginBottom: 10,
     fontWeight: 'bold',
     color: MAIN_GRAY,
     fontSize: 25,
@@ -31,6 +32,6 @@ export default StyleSheet.create({
   },
   customInputStyle: {
     borderColor: MAIN_GRAY,
-    borderWidth: 0.2,
+    borderWidth: 0.3,
   },
 });

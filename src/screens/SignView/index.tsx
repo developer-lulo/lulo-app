@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Alert, Text, TextInput, View} from 'react-native';
+import {Alert, Text, TextInput, View, KeyboardAvoidingView} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
@@ -24,16 +24,14 @@ interface AuthResult {
 const SignView = ({navigation, route}: any) => {
   const {isNewUser} = route.params;
 
-  const [email, setEmail] = useState<string | undefined>(
-    'felipemantillagomez@gmail.com',
-  );
+  const [email, setEmail] = useState<string | undefined>('');
   const [isAValidEmail, setIsAValidEmail] = useState(true);
   const onChangeEmail = (value: string) => {
     EMAIL_REGEX.exec(value) ? setIsAValidEmail(true) : setIsAValidEmail(false);
     setEmail(value);
   };
 
-  const [password, setPassword] = useState<string | undefined>('12345678');
+  const [password, setPassword] = useState<string | undefined>('');
   const [isAValidPassword, setIsAValidPassword] = useState(true);
   const onChangePassword = (value: string) => {
     if (password?.length && password.length > 7) {
@@ -85,54 +83,59 @@ const SignView = ({navigation, route}: any) => {
       <View style={styles.header}>
         <HomeHeader />
       </View>
-      <View style={styles.formStyle}>
-        <Text style={styles.title}>
-          {isNewUser ? 'Creemos tu cuenta' : 'Ingresemos para empezar'}
-        </Text>
-        {/* Email Input */}
-        <Text style={styles.labelStyle}> Correo </Text>
-        <TextInput
-          style={MAIN_INPUT_STYLE}
-          onChangeText={onChangeEmail}
-          value={email}
-          placeholder="Ingresa tu correo"
-          keyboardType="email-address"
-        />
-        {!isAValidEmail && !!email ? (
-          <Text style={{...styles.hint, ...styles.errorHint}}>
-            Debe ser un correo válido{' '}
+      <KeyboardAvoidingView behavior="padding">
+        <View style={styles.formStyle}>
+          <Text style={styles.title}>
+            {isNewUser ? 'Creemos tu cuenta' : 'Ingresemos para empezar'}
           </Text>
-        ) : null}
-        {/* Password Input */}
-        <Text style={{...styles.labelStyle, marginTop: 20}}> Contraseña </Text>
-        <TextInput
-          style={MAIN_INPUT_STYLE}
-          onChangeText={onChangePassword}
-          value={password}
-          placeholder="Ingresa tu contraseña"
-          keyboardType="default"
-          textContentType="password"
-          secureTextEntry={true}
-        />
-        {!isAValidPassword && !!password ? (
-          <Text style={{...styles.hint, ...styles.errorHint}}>
-            Debe tener al menos ocho caracteres
+          {/* Email Input */}
+          <Text style={styles.labelStyle}> Correo </Text>
+          <TextInput
+            style={MAIN_INPUT_STYLE}
+            onChangeText={onChangeEmail}
+            value={email}
+            placeholder="Ingresa tu correo"
+            keyboardType="email-address"
+          />
+          {!isAValidEmail && !!email ? (
+            <Text style={{...styles.hint, ...styles.errorHint}}>
+              Debe ser un correo válido{' '}
+            </Text>
+          ) : null}
+          {/* Password Input */}
+          <Text style={{...styles.labelStyle, marginTop: 20}}>
+            {' '}
+            Contraseña{' '}
           </Text>
-        ) : null}
-      </View>
-      <View style={styles.buttonsContainer}>
-        <ActionButton
-          type="back"
-          onPress={() => {
-            navigation.navigate('NewOrNot');
-          }}
-        />
-        <ActionButton
-          disabled={!isAValidEmail || !isAValidPassword}
-          type="next"
-          onPress={onSubmit}
-        />
-      </View>
+          <TextInput
+            style={MAIN_INPUT_STYLE}
+            onChangeText={onChangePassword}
+            value={password}
+            placeholder="Ingresa tu contraseña"
+            keyboardType="default"
+            textContentType="password"
+            secureTextEntry={true}
+          />
+          {!isAValidPassword && !!password ? (
+            <Text style={{...styles.hint, ...styles.errorHint}}>
+              Debe tener al menos ocho caracteres
+            </Text>
+          ) : null}
+        </View>
+        <View style={styles.buttonsContainer}>
+          <ActionButton
+            type="back"
+            onPress={() => {
+              navigation.navigate('NewOrNot');
+            }}
+          />
+          <ActionButton
+            disabled={!isAValidEmail || !isAValidPassword}
+            type="next"
+            onPress={onSubmit}
+          />
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

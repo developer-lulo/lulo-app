@@ -1,5 +1,11 @@
-import React, {useEffect} from 'react';
-import {Alert, ScrollView, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  ScrollView,
+  View,
+  KeyboardAvoidingView,
+  Keyboard,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
 import {Channel} from '../../gql/types';
@@ -26,6 +32,28 @@ const ChannelView = ({client}: ChannelViewProps) => {
 
   const messagesReactive = useReactiveVar(messages);
 
+  const [keyboardShown, setKeyboardShown] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardShown(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardShown(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   useEffect(() => {
     const initComponentAsync = async () => {
       if (client) {
@@ -50,14 +78,22 @@ const ChannelView = ({client}: ChannelViewProps) => {
       <View style={styles.header}>
         <ChannelViewHeader channel={params.channel} />
       </View>
-      <ScrollView style={styles.content}>
-        {messagesReactive.map(message => (
-          <ChannelMessage key={message.id} message={message} client={client} />
-        ))}
-      </ScrollView>
-      <View style={styles.composer}>
-        <MessageComposer client={client} channel={params.channel} />
-      </View>
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={keyboardShown ? 0 : 50}>
+        <ScrollView style={styles.content}>
+          {messagesReactive.map(message => (
+            <ChannelMessage
+              key={message.id}
+              message={message}
+              client={client}
+            />
+          ))}
+        </ScrollView>
+        <View style={styles.composer}>
+          <MessageComposer client={client} channel={params.channel} />
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
