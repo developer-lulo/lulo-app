@@ -36,7 +36,7 @@ const HomeView = ({navigation, client}: HomeProps) => {
 
   useEffect(() => {
     const initComponentAsync = async () => {
-      if (client) {
+      if (client && channels.length) {
         const data = await getMeQuery(client);
 
         const initValues = await initValuesQuery(client, data.me.id);
@@ -47,7 +47,7 @@ const HomeView = ({navigation, client}: HomeProps) => {
     };
 
     initComponentAsync();
-  }, [client]);
+  }, [client, channelsReactive]);
 
   // renders
   return (

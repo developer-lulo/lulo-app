@@ -20,6 +20,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type ChangeChannelStatusInput = {
+  channelId: Scalars['String'];
+  channelStatus?: InputMaybe<ChannelStatus>;
+};
+
 export type ChangeMessageStatusInput = {
   messageId: Scalars['String'];
   messageStatus?: InputMaybe<ChannelMessageStatus>;
@@ -29,6 +34,8 @@ export type Channel = {
   __typename?: 'Channel';
   channelCharacter?: Maybe<ChannelCharacter>;
   channelCharacterId?: Maybe<Scalars['String']>;
+  channelStatus?: Maybe<ChannelStatus>;
+  count?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['String']>;
   displayName?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -56,6 +63,11 @@ export enum ChannelMessageType {
   Task = 'TASK',
 }
 
+export enum ChannelStatus {
+  Inuse = 'INUSE',
+  Stored = 'STORED',
+}
+
 export type CreateChannelInput = {
   channelCharacterId: Scalars['String'];
   displayName: Scalars['String'];
@@ -75,9 +87,14 @@ export type Message = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changeChannelStatus?: Maybe<Channel>;
   changeMessageStatus?: Maybe<Message>;
   createChannel?: Maybe<Channel>;
   sendMessageOnChannel?: Maybe<Message>;
+};
+
+export type MutationChangeChannelStatusArgs = {
+  input?: InputMaybe<ChangeChannelStatusInput>;
 };
 
 export type MutationChangeMessageStatusArgs = {
@@ -264,12 +281,15 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  ChangeChannelStatusInput: ChangeChannelStatusInput;
   ChangeMessageStatusInput: ChangeMessageStatusInput;
   Channel: ResolverTypeWrapper<Channel>;
   ChannelCharacter: ResolverTypeWrapper<ChannelCharacter>;
   ChannelMessageStatus: ChannelMessageStatus;
   ChannelMessageType: ChannelMessageType;
+  ChannelStatus: ChannelStatus;
   CreateChannelInput: CreateChannelInput;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Message: ResolverTypeWrapper<Message>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -284,10 +304,12 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
+  ChangeChannelStatusInput: ChangeChannelStatusInput;
   ChangeMessageStatusInput: ChangeMessageStatusInput;
   Channel: Channel;
   ChannelCharacter: ChannelCharacter;
   CreateChannelInput: CreateChannelInput;
+  Int: Scalars['Int'];
   Message: Message;
   Mutation: {};
   Query: {};
@@ -313,6 +335,12 @@ export type ChannelResolvers<
     ParentType,
     ContextType
   >;
+  channelStatus?: Resolver<
+    Maybe<ResolversTypes['ChannelStatus']>,
+    ParentType,
+    ContextType
+  >;
+  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   createdAt?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -387,6 +415,12 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
 > = {
+  changeChannelStatus?: Resolver<
+    Maybe<ResolversTypes['Channel']>,
+    ParentType,
+    ContextType,
+    Partial<MutationChangeChannelStatusArgs>
+  >;
   changeMessageStatus?: Resolver<
     Maybe<ResolversTypes['Message']>,
     ParentType,

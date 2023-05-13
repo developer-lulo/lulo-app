@@ -38,6 +38,7 @@ export const INIT_QUERY = gql`
       id
       displayName
       imageUrl
+      count
       updatedAt
       createdAt
       channelCharacter {

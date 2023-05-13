@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GREEN_MINT} from '../../colors';
+import {MAIN_BAD_RED, MAIN_GREEN_MINT} from '../../colors';
+import {MAIN_FONT_FAMILY, MAIN_INPUT_STYLE} from '../../constants';
 
 export default StyleSheet.create({
   container: {
@@ -24,5 +25,13 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  deleteChannelStyles: {
+    ...MAIN_INPUT_STYLE,
+  },
+  deleteTextStyle: {
+    color: MAIN_BAD_RED,
+    textAlign: 'center',
+    fontFamily: MAIN_FONT_FAMILY,
   },
 });

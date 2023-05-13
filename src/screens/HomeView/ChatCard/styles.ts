@@ -41,6 +41,23 @@ export default StyleSheet.create({
   extededInfoContainer: {
     display: 'flex',
     alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: '25%',
+  },
+  counterBadge: {
+    width: 20,
+    height: 20,
+    backgroundColor: '#fe3838',
+    borderRadius: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  counterBadgeText: {
+    fontFamily: 'Poppins-Bold',
+    color: 'white',
   },
   date: {
     fontFamily: MAIN_FONT_FAMILY,

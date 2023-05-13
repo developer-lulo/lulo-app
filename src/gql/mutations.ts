@@ -59,3 +59,29 @@ export const CHANGE_MESSAGE_STATUS = gql`
     }
   }
 `;
+
+export interface ChangeChannelStatusResult {
+  changeChannelStatus: Channel;
+}
+
+export const CHANGE_CHANNEL_STATUS = gql`
+  mutation ChangeChannelStatus($input: ChangeChannelStatusInput) {
+    changeChannelStatus(input: $input) {
+      channelStatus
+      displayName
+      channelCharacter {
+        id
+        displayName
+        imageUrl
+        description
+        updatedAt
+        createdAt
+      }
+      channelCharacterId
+      createdAt
+      id
+      imageUrl
+      updatedAt
+    }
+  }
+`;

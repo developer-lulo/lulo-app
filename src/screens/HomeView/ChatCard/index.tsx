@@ -59,6 +59,13 @@ const ChatCard = ({chat, onPress}: ChatCardProps) => {
         </View>
       </View>
       <View style={styles.extededInfoContainer}>
+        <View>
+          {chat.count ? (
+            <View style={styles.counterBadge}>
+              <Text style={styles.counterBadgeText}>{chat.count}</Text>
+            </View>
+          ) : null}
+        </View>
         <Text style={styles.date}>
           {updatedAtByDayjs.calendar(null, CALENDAR_FORMAT)}{' '}
         </Text>

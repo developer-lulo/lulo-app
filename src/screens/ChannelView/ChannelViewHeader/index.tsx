@@ -4,7 +4,7 @@ import {HEADER_BACK_BUTTON} from '../../../constants';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
 import {Channel} from '../../../gql/types';
-import {messages} from '../../../services/GlobalVarService';
+import {channels, messages} from '../../../services/GlobalVarService';
 
 interface ChannelViewHeaderProps {
   channel: Channel;
@@ -19,6 +19,7 @@ const ChannelViewHeader = (props: ChannelViewHeaderProps) => {
         style={styles.backButton}
         onPress={() => {
           messages([]);
+          channels([]);
           navigation.goBack();
         }}>
         <Image source={HEADER_BACK_BUTTON} />
