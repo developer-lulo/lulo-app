@@ -19,6 +19,13 @@ export default StyleSheet.create({
     height: '70%',
     padding: 20,
   },
+  loader: {
+    height: '70%',
+    padding: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   composer: {
     height: '20%',
     display: 'flex',

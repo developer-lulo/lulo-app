@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Text,
+  ActivityIndicator,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
@@ -26,6 +27,7 @@ import MessageComposer from './MessageComposer';
 import {messages} from '../../services/GlobalVarService';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {channels} from '../../services/GlobalVarService';
+import {MAIN_GREEN_MINT} from '../../colors';
 
 interface ChannelViewProps {
   client: ApolloClient<any>;
@@ -43,6 +45,7 @@ const ChannelView = ({client}: ChannelViewProps) => {
   const messagesReactive = useReactiveVar(messages);
 
   const [keyboardShown, setKeyboardShown] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigation = useNavigation();
 
@@ -72,17 +75,19 @@ const ChannelView = ({client}: ChannelViewProps) => {
         const data = await getChannelMessages(client, params.channel.id).catch(
           error => {
             Alert.alert(error.message);
+            navigation.goBack();
           },
         );
 
         if (data) {
           messages(data);
+          setIsLoading(false);
         }
       }
     };
 
     initComponentAsync();
-  }, [client, params]);
+  }, [client, params, navigation]);
 
   const handleDeleteChat = async () => {
     const input: ChangeChannelStatusInput = {
@@ -108,23 +113,29 @@ const ChannelView = ({client}: ChannelViewProps) => {
       <KeyboardAvoidingView
         behavior="padding"
         keyboardVerticalOffset={keyboardShown ? 0 : 50}>
-        <ScrollView style={styles.content}>
-          {messagesReactive.length! ? (
-            messagesReactive.map(message => (
-              <ChannelMessage
-                key={message.id}
-                message={message}
-                client={client}
-              />
-            ))
-          ) : (
-            <TouchableOpacity
-              onPress={handleDeleteChat}
-              style={styles.deleteChannelStyles}>
-              <Text style={styles.deleteTextStyle}> Eliminar Chat</Text>
-            </TouchableOpacity>
-          )}
-        </ScrollView>
+        {isLoading ? (
+          <View style={styles.content}>
+            <ActivityIndicator color={MAIN_GREEN_MINT} />
+          </View>
+        ) : (
+          <ScrollView style={styles.content}>
+            {messagesReactive.length! ? (
+              messagesReactive.map(message => (
+                <ChannelMessage
+                  key={message.id}
+                  message={message}
+                  client={client}
+                />
+              ))
+            ) : (
+              <TouchableOpacity
+                onPress={handleDeleteChat}
+                style={styles.deleteChannelStyles}>
+                <Text style={styles.deleteTextStyle}> Eliminar Chat</Text>
+              </TouchableOpacity>
+            )}
+          </ScrollView>
+        )}
 
         <View style={styles.composer}>
           <MessageComposer client={client} channel={params.channel} />
