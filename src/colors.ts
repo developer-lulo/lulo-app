@@ -1,4 +1,5 @@
 export const MAIN_ORANGE = '#F4A604';
+export const MAIN_ORANGE_TINT = '#fdf1d7';
 export const MAIN_GREEN_MINT = '#E8FF03';
 export const MAIN_GRAY = '#444444';
 export const MAIN_WHITE = '#FFFFFF';
@@ -13,3 +14,4 @@ export const MAIN_BAD_RED = '#DF0000';
 
 export const MAIN_APP_COLOR = MAIN_ORANGE;
 export const MAIN_TITLES_COLOR = MAIN_GREEN_MINT;
+export const MAIN_APP_COLOR_TINT = MAIN_ORANGE_TINT;

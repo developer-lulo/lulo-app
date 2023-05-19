@@ -4,6 +4,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {isSignedIn} from '../../services/GlobalVarService';
 
 import styles from './styles';
+import {MAIN_BAD_RED, MAIN_GRAY} from '../../colors';
 
 const UserSettingsView = ({navigation}: any) => {
   return (
@@ -16,14 +17,16 @@ const UserSettingsView = ({navigation}: any) => {
               isSignedIn(false);
             });
           }}>
-          <Text style={styles.optionText}>Cerrar sesión</Text>
+          <Text style={{...styles.optionText, ...{color: MAIN_GRAY}}}>
+            Cerrar sesión
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.item}
           onPress={() => {
             navigation.goBack();
           }}>
-          <Text style={{...styles.optionText, ...{color: 'red'}}}>
+          <Text style={{...styles.optionText, ...{color: MAIN_BAD_RED}}}>
             Cancelar
           </Text>
         </TouchableOpacity>

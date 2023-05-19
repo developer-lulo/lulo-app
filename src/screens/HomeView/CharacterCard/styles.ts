@@ -1,8 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_WHITE_ALPHA} from '../../../colors';
+import {
+  MAIN_APP_COLOR,
+  MAIN_GRAY,
+  MAIN_GREEN_MINT,
+  MAIN_WHITE,
+  MAIN_WHITE_ALPHA,
+} from '../../../colors';
 import {
   DASHED_BORDER_WIDTH,
   MAIN_FONT_FAMILY,
+  MAIN_FONT_FAMILY_BOLD,
   MAIN_SHADOW,
 } from '../../../constants';
 
@@ -32,7 +39,7 @@ export default StyleSheet.create({
     borderRadius: 50,
   },
   name: {
-    fontFamily: MAIN_FONT_FAMILY,
-    color: MAIN_GRAY,
+    fontFamily: MAIN_FONT_FAMILY_BOLD,
+    color: MAIN_GREEN_MINT,
   },
 });

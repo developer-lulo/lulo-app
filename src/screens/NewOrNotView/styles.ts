@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_APP_COLOR} from '../../colors';
+import {MAIN_APP_COLOR, MAIN_APP_COLOR_TINT} from '../../colors';
 
 export default StyleSheet.create({
   container: {
@@ -21,7 +21,7 @@ export default StyleSheet.create({
     height: 200,
     width: 200,
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: MAIN_APP_COLOR_TINT,
     borderRadius: 50,
     display: 'flex',
     alignItems: 'center',

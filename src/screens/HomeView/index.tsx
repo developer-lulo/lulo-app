@@ -13,6 +13,7 @@ import {ChannelCharacter} from '../../gql/types';
 import {ApolloClient, useReactiveVar} from '@apollo/client';
 import {getMeQuery, initValuesQuery} from '../../services/UserService';
 import {channels, characters} from '../../services/GlobalVarService';
+import {MAIN_APP_COLOR_TINT} from '../../colors';
 
 interface HomeProps {
   client: ApolloClient<any>;
@@ -78,8 +79,9 @@ const HomeView = ({navigation, client}: HomeProps) => {
         ref={bottomSheetRef}
         index={openChats}
         snapPoints={snapPoints}
+        backgroundStyle={{backgroundColor: MAIN_APP_COLOR_TINT}}
         style={{...MAIN_SHADOW}}>
-        <ScrollView>
+        <ScrollView style={{backgroundColor: MAIN_APP_COLOR_TINT}}>
           {channelsReactive.map(channel => (
             <ChatCard
               key={channel.id}

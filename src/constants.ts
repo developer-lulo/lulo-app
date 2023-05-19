@@ -3,6 +3,8 @@ import {MAIN_GRAY} from './colors';
 export const DASHED_BORDER_WIDTH = 3;
 
 export const MAIN_FONT_FAMILY = 'Poppins-Regular';
+export const MAIN_FONT_FAMILY_BOLD = 'Poppins-Bold';
+
 
 // Big Buttons (forms ETC)
 export const NEXT_ICON = require('./assets/images/signin-action-buttons/next.png');

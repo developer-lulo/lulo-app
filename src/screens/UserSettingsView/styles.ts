@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_FONT_FAMILY} from '../../constants';
+import {MAIN_FONT_FAMILY_BOLD} from '../../constants';
+import {MAIN_APP_COLOR, MAIN_APP_COLOR_TINT} from '../../colors';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: MAIN_APP_COLOR_TINT,
     flex: 1,
   },
   header: {
@@ -15,13 +16,12 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 70,
-    // backgroundColor: 'red',
     marginHorizontal: 10,
-    borderColor: '#999999',
+    borderColor: MAIN_APP_COLOR,
     borderBottomWidth: 0.5,
   },
   optionText: {
-    fontFamily: MAIN_FONT_FAMILY,
+    fontFamily: MAIN_FONT_FAMILY_BOLD,
     fontSize: 16,
   },
 });

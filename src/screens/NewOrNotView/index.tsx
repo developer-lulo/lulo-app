@@ -2,9 +2,14 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {MAIN_FONT_FAMILY, MAIN_SHADOW} from '../../constants';
+import {
+  MAIN_FONT_FAMILY,
+  MAIN_FONT_FAMILY_BOLD,
+  MAIN_SHADOW,
+} from '../../constants';
 import styles from './styles';
 import HomeHeader from '../HomeView/HomeHeader';
+import {MAIN_APP_COLOR, MAIN_GRAY} from '../../colors';
 
 const NewOrNotView = ({navigation}: any) => {
   const onPress = (button: string) => {
@@ -39,8 +44,9 @@ const NewOrNotView = ({navigation}: any) => {
             />
             <Text
               style={{
-                fontFamily: MAIN_FONT_FAMILY,
-                fontSize: 16,
+                fontFamily: MAIN_FONT_FAMILY_BOLD,
+                fontSize: 22,
+                color: MAIN_GRAY,
               }}>
               {{new: 'Soy nuevo', old: 'Soy parte'}[button]}
             </Text>
