@@ -8,7 +8,7 @@ export const MAIN_FONT_FAMILY = 'Poppins-Regular';
 export const NEXT_ICON = require('./assets/images/signin-action-buttons/next.png');
 export const BACK_ICON = require('./assets/images/signin-action-buttons/back.png');
 
-export const DEFAULT_AVATAR = require('./assets/images/default-avatar.png');
+export const DEFAULT_AVATAR = require('./assets/images/lulito.png');
 
 // little Buttons (Headers)
 export const HEADER_BACK_BUTTON = require('./assets/images/header-action-buttons/back.png');

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY} from '../../../colors';
+import {MAIN_TITLES_COLOR} from '../../../colors';
 import {MAIN_FONT_FAMILY} from '../../../constants';
 
 export default StyleSheet.create({
@@ -18,13 +18,13 @@ export default StyleSheet.create({
     alignItems: 'flex-end',
   },
   title: {
-    color: MAIN_GRAY,
+    color: MAIN_TITLES_COLOR,
     fontFamily: MAIN_FONT_FAMILY,
     fontSize: 21,
     fontWeight: 'bold',
   },
   subtitle: {
-    color: MAIN_GRAY,
+    color: MAIN_TITLES_COLOR,
     fontFamily: MAIN_FONT_FAMILY,
   },
 });

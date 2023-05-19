@@ -30,6 +30,8 @@ import TaskMessageAction, {
 } from './TaskMessageAction';
 import {DELETE_TASK_ICON} from '../../../../constants';
 
+const TEXT_MAX_LENGTH = 45;
+
 interface TaskMessageProps {
   message: Message;
   client: ApolloClient<any>;
@@ -153,8 +155,10 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
 
   return (
     <View style={getCardStyles()}>
-      <Text style={getTextStyles()} numberOfLines={1}>
-        {text}
+      <Text style={getTextStyles()}>
+        {text && text.length > TEXT_MAX_LENGTH
+          ? text.substring(0, TEXT_MAX_LENGTH - 3) + '...'
+          : text}
       </Text>
       <View style={styles.button}>
         {messageStatus === ChannelMessageStatus.Done ? (

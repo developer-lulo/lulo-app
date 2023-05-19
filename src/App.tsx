@@ -19,7 +19,7 @@ const App = () => {
       SplashScreen.hide();
       setTimeout(() => {
         isLoading(false);
-      }, 3000);
+      }, 1000);
 
       const token = await AsyncStorage.getItem('token');
       if (token) {

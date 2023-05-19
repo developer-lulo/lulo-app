@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY} from '../../../colors';
+import {MAIN_TITLES_COLOR} from '../../../colors';
 import {MAIN_FONT_FAMILY, MAIN_SHADOW} from '../../../constants';
 
 export default StyleSheet.create({
@@ -16,12 +16,12 @@ export default StyleSheet.create({
   title: {
     fontSize: 30,
     fontFamily: 'Poppins-SemiBold',
-    color: MAIN_GRAY,
+    color: MAIN_TITLES_COLOR,
   },
   subtitle: {
     fontSize: 15,
     fontFamily: MAIN_FONT_FAMILY,
-    color: MAIN_GRAY,
+    color: MAIN_TITLES_COLOR,
   },
   avatarContainer: {
     backgroundColor: 'white',

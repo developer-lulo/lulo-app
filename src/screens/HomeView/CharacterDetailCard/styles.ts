@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_WHITE, MAIN_WHITE_ALPHA} from '../../../colors';
+import {MAIN_GRAY, MAIN_GREEN_MINT, MAIN_WHITE, MAIN_WHITE_ALPHA} from '../../../colors';
 import {
   DASHED_BORDER_WIDTH,
   MAIN_FONT_FAMILY,
@@ -20,7 +20,7 @@ export default StyleSheet.create({
     borderWidth: DASHED_BORDER_WIDTH,
     borderStyle: 'dashed',
     borderRadius: 20,
-    borderColor: MAIN_GRAY,
+    borderColor: MAIN_GREEN_MINT,
     backgroundColor: MAIN_WHITE_ALPHA,
   },
   infoContainer: {

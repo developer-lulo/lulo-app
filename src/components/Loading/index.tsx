@@ -1,7 +1,8 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {ActivityIndicator, Text, View} from 'react-native';
 import styles from './styles';
-import Lottie from 'lottie-react-native';
+// import Lottie from 'lottie-react-native';
+import {MAIN_GREEN_MINT} from '../../colors';
 
 interface LoaderProps {
   message?: string;
@@ -10,13 +11,13 @@ interface LoaderProps {
 const Loading = (props: LoaderProps) => {
   return (
     <View style={styles.container}>
-      {/* <Image style={styles.loader} source={LOADER_GIF} /> */}
-      <Lottie
+      {/* <Lottie
         source={require('./lulo-loader.lottie.json')}
         autoPlay
         loop
         speed={1.5}
-      />
+      /> */}
+      <ActivityIndicator size="large" color={MAIN_GREEN_MINT} />
       {props.message ? (
         <Text style={styles.messageStyle}>{props.message}</Text>
       ) : null}

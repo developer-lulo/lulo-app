@@ -1,8 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_GREEN_MINT} from '../../colors';
+import {MAIN_APP_COLOR, MAIN_GREEN_MINT} from '../../colors';
 import {MAIN_FONT_FAMILY} from '../../constants';
-
-const LOADER_SIZE = 200;
 
 export default StyleSheet.create({
   container: {
@@ -10,18 +8,15 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    backgroundColor: MAIN_GREEN_MINT,
-    flexDirection: 'row',
-  },
-  loader: {
-    height: LOADER_SIZE,
-    width: LOADER_SIZE,
+    width: '100%',
+    backgroundColor: MAIN_APP_COLOR,
+    flexDirection: 'column',
   },
   messageStyle: {
     fontFamily: MAIN_FONT_FAMILY,
-    color: MAIN_GRAY,
+    color: MAIN_GREEN_MINT,
     fontSize: 15,
-    alignSelf: 'flex-end',
-    marginBottom: '20%',
+    position: 'absolute',
+    bottom: '20%',
   },
 });

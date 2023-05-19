@@ -1,9 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GREEN_MINT} from '../../colors';
+import {MAIN_APP_COLOR} from '../../colors';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: MAIN_GREEN_MINT,
+    backgroundColor: MAIN_APP_COLOR,
     flex: 1,
   },
   header: {

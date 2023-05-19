@@ -6,6 +6,7 @@ import {Channel, SendMessageInput} from '../../../gql/types';
 import {sendMessageOnChannel} from '../../../services/ChannelService';
 import {ApolloClient} from '@apollo/client';
 import {messages} from '../../../services/GlobalVarService';
+import {MAIN_APP_COLOR, MAIN_GRAY} from '../../../colors';
 
 interface MessageComposerProps {
   channel: Channel;
@@ -48,7 +49,10 @@ const MessageComposer = ({channel, client}: MessageComposerProps) => {
       />
       <View style={styles.actionsContainer}>
         <TouchableOpacity onPress={sendMessage} style={styles.action}>
-          <Image source={SEND_MESSAGE_ICON} />
+          <Image
+            source={SEND_MESSAGE_ICON}
+            style={{tintColor: MAIN_APP_COLOR}}
+          />
         </TouchableOpacity>
       </View>
     </View>

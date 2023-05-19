@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_GREEN_MINT} from '../../colors';
+import {MAIN_APP_COLOR, MAIN_TITLES_COLOR, MAIN_BAD_RED} from '../../colors';
 import {MAIN_FONT_FAMILY} from '../../constants';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: MAIN_GREEN_MINT,
+    backgroundColor: MAIN_APP_COLOR,
     flex: 1,
   },
   header: {
@@ -27,7 +27,7 @@ export default StyleSheet.create({
   labelStyle: {
     fontFamily: MAIN_FONT_FAMILY,
     fontWeight: 'bold',
-    color: MAIN_GRAY,
+    color: MAIN_TITLES_COLOR,
     fontSize: 25,
     alignSelf: 'flex-start',
   },
@@ -36,11 +36,11 @@ export default StyleSheet.create({
     fontSize: 12,
   },
   errorHint: {
-    color: 'red',
+    color: MAIN_BAD_RED,
   },
   title: {
     fontFamily: MAIN_FONT_FAMILY,
-    color: MAIN_GRAY,
+    color: MAIN_TITLES_COLOR,
     marginBottom: 50,
     fontSize: 20,
   },
