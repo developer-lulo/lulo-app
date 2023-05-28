@@ -13,7 +13,12 @@ import {ChannelCharacter} from '../../gql/types';
 import {ApolloClient, useReactiveVar} from '@apollo/client';
 import {getMeQuery, initValuesQuery} from '../../services/UserService';
 import {channels, characters} from '../../services/GlobalVarService';
-import {MAIN_APP_COLOR_TINT} from '../../colors';
+import {
+  MAIN_APP_COLOR,
+  MAIN_APP_COLOR_TINT,
+  MAIN_GREEN_MINT,
+} from '../../colors';
+import {ActivityIndicator} from 'react-native';
 
 interface HomeProps {
   client: ApolloClient<any>;
@@ -21,6 +26,8 @@ interface HomeProps {
 }
 
 const HomeView = ({navigation, client}: HomeProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   // bottom sheet needed
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['20%', '75%'], []);
@@ -44,6 +51,8 @@ const HomeView = ({navigation, client}: HomeProps) => {
 
         channels(initValues.userChannels);
         characters(initValues.channelCharacters);
+
+        setIsLoading(false);
       }
     };
 
@@ -81,19 +90,32 @@ const HomeView = ({navigation, client}: HomeProps) => {
         snapPoints={snapPoints}
         backgroundStyle={{backgroundColor: MAIN_APP_COLOR_TINT}}
         style={{...MAIN_SHADOW}}>
-        <ScrollView style={{backgroundColor: MAIN_APP_COLOR_TINT}}>
-          {channelsReactive.map(channel => (
-            <ChatCard
-              key={channel.id}
-              chat={channel}
-              onPress={() => {
-                navigation.navigate('ChannelView', {
-                  channel,
-                });
-              }}
-            />
-          ))}
-        </ScrollView>
+        {isLoading ? (
+          <View
+            style={{
+              height: '50%',
+
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ActivityIndicator color={MAIN_APP_COLOR} size={'large'} />
+          </View>
+        ) : (
+          <ScrollView style={{backgroundColor: MAIN_APP_COLOR_TINT}}>
+            {channelsReactive.map(channel => (
+              <ChatCard
+                key={channel.id}
+                chat={channel}
+                onPress={() => {
+                  navigation.navigate('ChannelView', {
+                    channel,
+                  });
+                }}
+              />
+            ))}
+          </ScrollView>
+        )}
       </BottomSheet>
     </SafeAreaView>
   );

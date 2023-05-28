@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   ScrollView,
   View,
-  KeyboardAvoidingView,
   Keyboard,
   Text,
   ActivityIndicator,
@@ -27,7 +26,9 @@ import MessageComposer from './MessageComposer';
 import {messages} from '../../services/GlobalVarService';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {channels} from '../../services/GlobalVarService';
-import {MAIN_GREEN_MINT} from '../../colors';
+import {MAIN_GREEN_MINT, MAIN_WHITE} from '../../colors';
+import BottomSheet from '@gorhom/bottom-sheet';
+import {MAIN_SHADOW} from '../../constants';
 
 interface ChannelViewProps {
   client: ApolloClient<any>;
@@ -44,22 +45,29 @@ const ChannelView = ({client}: ChannelViewProps) => {
 
   const messagesReactive = useReactiveVar(messages);
 
-  const [keyboardShown, setKeyboardShown] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigation = useNavigation();
+
+  const handleKeyboardChanges = ({isShown}: {isShown: boolean}) => {
+    if (isShown) {
+      bottomSheetRef.current?.snapToIndex(1);
+    } else {
+      bottomSheetRef.current?.snapToIndex(0);
+    }
+  };
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        setKeyboardShown(true);
+        handleKeyboardChanges({isShown: true});
       },
     );
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        setKeyboardShown(false);
+        handleKeyboardChanges({isShown: false});
       },
     );
 
@@ -104,15 +112,19 @@ const ChannelView = ({client}: ChannelViewProps) => {
     navigation.goBack();
   };
 
+  // ref
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // variables
+  const snapPoints = useMemo(() => ['20%', '60%'], []);
+
   // renders
   return (
     <SafeAreaView edges={['top']} style={styles.container}>
       <View style={styles.header}>
         <ChannelViewHeader channel={params.channel} />
       </View>
-      <KeyboardAvoidingView
-        behavior="padding"
-        keyboardVerticalOffset={keyboardShown ? 0 : 50}>
+      <View style={styles.contentContainer}>
         {isLoading ? (
           <View style={styles.content}>
             <ActivityIndicator color={MAIN_GREEN_MINT} />
@@ -137,10 +149,17 @@ const ChannelView = ({client}: ChannelViewProps) => {
           </ScrollView>
         )}
 
-        <View style={styles.composer}>
-          <MessageComposer client={client} channel={params.channel} />
-        </View>
-      </KeyboardAvoidingView>
+        <BottomSheet
+          backgroundStyle={{backgroundColor: MAIN_WHITE}}
+          ref={bottomSheetRef}
+          index={0}
+          snapPoints={snapPoints}
+          style={{...MAIN_SHADOW}}>
+          <View style={styles.composer}>
+            <MessageComposer client={client} channel={params.channel} />
+          </View>
+        </BottomSheet>
+      </View>
     </SafeAreaView>
   );
 };

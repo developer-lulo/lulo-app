@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {MAIN_GRAY, MAIN_WHITE} from '../../../../colors';
-import {MAIN_FONT_FAMILY} from '../../../../constants';
+import {MAIN_FONT_FAMILY, MAIN_SHADOW_LOW} from '../../../../constants';
 
 export default StyleSheet.create({
   card: {
@@ -12,6 +12,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
+    ...MAIN_SHADOW_LOW,
   },
   text: {
     color: MAIN_GRAY,

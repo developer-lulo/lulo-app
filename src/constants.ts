@@ -5,7 +5,6 @@ export const DASHED_BORDER_WIDTH = 3;
 export const MAIN_FONT_FAMILY = 'Poppins-Regular';
 export const MAIN_FONT_FAMILY_BOLD = 'Poppins-Bold';
 
-
 // Big Buttons (forms ETC)
 export const NEXT_ICON = require('./assets/images/signin-action-buttons/next.png');
 export const BACK_ICON = require('./assets/images/signin-action-buttons/back.png');
@@ -27,6 +26,18 @@ export const MAIN_SHADOW = {
   shadowOpacity: 0.27,
   shadowRadius: 4.65,
   elevation: 6,
+};
+
+export const MAIN_SHADOW_LOW = {
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 1,
+  },
+  shadowOpacity: 0.2,
+  shadowRadius: 1.41,
+
+  elevation: 2,
 };
 
 export const MAIN_INPUT_STYLE = {

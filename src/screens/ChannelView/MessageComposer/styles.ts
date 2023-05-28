@@ -1,12 +1,21 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_FONT_FAMILY} from '../../../constants';
-import {MAIN_GRAY} from '../../../colors';
+import {MAIN_FONT_FAMILY, MAIN_SHADOW_LOW} from '../../../constants';
+import {MAIN_GRAY, MAIN_WHITE} from '../../../colors';
 
 const borderRadius = 50;
 
 export default StyleSheet.create({
   inputContainer: {
-    backgroundColor: 'white',
+    backgroundColor: MAIN_WHITE,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
     borderRadius,
     width: '100%',
     fontFamily: MAIN_FONT_FAMILY,
