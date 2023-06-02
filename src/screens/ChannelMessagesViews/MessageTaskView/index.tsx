@@ -13,6 +13,7 @@ import {useRoute} from '@react-navigation/native';
 import styles from './styles';
 import {GOOGLE_CALENDAR_ICON, WHATSAPP_ICON} from '../../../constants';
 import {TextInput} from 'react-native-gesture-handler';
+import Share from 'react-native-share';
 
 interface MessageTaskViewProps {
   client: ApolloClient<any>;
@@ -28,7 +29,21 @@ const taskShareActions = [
     id: 'whatsapp',
     name: 'WhatsApp',
     icon: WHATSAPP_ICON,
-    handler: (message: string, description: string) => {},
+    handler: (message: string, description: string) => {
+      const _message = `*${message}*
+
+${description}
+      `;
+
+      const shareOptions = {
+        title: message,
+        message: _message,
+        social: Share.Social.WHATSAPP,
+        failOnCancel: false,
+      };
+
+      Share.open(shareOptions).catch(console.error);
+    },
   },
   {
     name: 'Google Calendar',
