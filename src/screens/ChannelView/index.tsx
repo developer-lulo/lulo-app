@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {createRef, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   ScrollView,
@@ -26,9 +26,14 @@ import MessageComposer from './MessageComposer';
 import {messages} from '../../services/GlobalVarService';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {channels} from '../../services/GlobalVarService';
-import {MAIN_GREEN_MINT, MAIN_WHITE} from '../../colors';
+import {MAIN_APP_COLOR, MAIN_WHITE} from '../../colors';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {MAIN_SHADOW} from '../../constants';
+
+enum KeyboardStates {
+  isOpened = 'open',
+  isClosed = 'closed',
+}
 
 interface ChannelViewProps {
   client: ApolloClient<any>;
@@ -39,6 +44,17 @@ interface ChannelViewParams {
   channel: Channel;
 }
 
+const contentHeightByKeyboardState = {
+  [KeyboardStates.isOpened]: {
+    height: '40%',
+    maxHeight: '40%',
+  },
+  [KeyboardStates.isClosed]: {
+    height: '80%',
+    maxHeight: '80%',
+  },
+};
+
 const ChannelView = ({client}: ChannelViewProps) => {
   const route = useRoute();
   const params = route.params as ChannelViewParams;
@@ -46,31 +62,25 @@ const ChannelView = ({client}: ChannelViewProps) => {
   const messagesReactive = useReactiveVar(messages);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isKeyboardOpened, setIsKeyboardOpened] = useState<KeyboardStates>(
+    KeyboardStates.isClosed,
+  );
 
   const navigation = useNavigation();
 
-  const handleKeyboardChanges = ({isShown}: {isShown: boolean}) => {
-    if (isShown) {
-      bottomSheetRef.current?.snapToIndex(1);
-    } else {
-      bottomSheetRef.current?.snapToIndex(0);
-    }
-  };
-
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      'keyboardWillShow',
       () => {
-        handleKeyboardChanges({isShown: true});
+        setIsKeyboardOpened(KeyboardStates.isOpened);
       },
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      'keyboardWillHide',
       () => {
-        handleKeyboardChanges({isShown: false});
+        setIsKeyboardOpened(KeyboardStates.isClosed);
       },
     );
-
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
@@ -86,16 +96,22 @@ const ChannelView = ({client}: ChannelViewProps) => {
             navigation.goBack();
           },
         );
-
         if (data) {
           messages(data);
           setIsLoading(false);
         }
       }
     };
-
     initComponentAsync();
   }, [client, params, navigation]);
+
+  const scrollViewRef = useRef();
+
+  const handlePress = () => {
+    if (scrollViewRef) {
+      scrollViewRef.current.scrollToEnd({animated: true});
+    }
+  };
 
   const handleDeleteChat = async () => {
     const input: ChangeChannelStatusInput = {
@@ -116,7 +132,7 @@ const ChannelView = ({client}: ChannelViewProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   // variables
-  const snapPoints = useMemo(() => ['20%', '60%'], []);
+  const snapPoints = useMemo(() => ['15%'], []);
 
   // renders
   return (
@@ -127,10 +143,15 @@ const ChannelView = ({client}: ChannelViewProps) => {
       <View style={styles.contentContainer}>
         {isLoading ? (
           <View style={styles.content}>
-            <ActivityIndicator color={MAIN_GREEN_MINT} />
+            <ActivityIndicator color={MAIN_APP_COLOR} />
           </View>
         ) : (
-          <ScrollView style={styles.content}>
+          <ScrollView
+            style={{
+              ...styles.content,
+              ...contentHeightByKeyboardState[isKeyboardOpened],
+            }}
+            ref={scrollViewRef}>
             {messagesReactive.length! ? (
               messagesReactive.map(message => (
                 <ChannelMessage
@@ -146,20 +167,31 @@ const ChannelView = ({client}: ChannelViewProps) => {
                 <Text style={styles.deleteTextStyle}> Eliminar Chat</Text>
               </TouchableOpacity>
             )}
+            {/* Space to the last item to show it well */}
+            <View style={{minHeight: 200}} />
           </ScrollView>
         )}
-
-        <BottomSheet
-          backgroundStyle={{backgroundColor: MAIN_WHITE}}
-          ref={bottomSheetRef}
-          index={0}
-          snapPoints={snapPoints}
-          style={{...MAIN_SHADOW}}>
-          <View style={styles.composer}>
-            <MessageComposer client={client} channel={params.channel} />
-          </View>
-        </BottomSheet>
       </View>
+      <BottomSheet
+        backgroundStyle={{backgroundColor: MAIN_WHITE}}
+        ref={bottomSheetRef}
+        index={0}
+        snapPoints={snapPoints}
+        keyboardBehavior="interactive"
+        keyboardBlurBehavior="restore"
+        enableHandlePanningGesture={false}
+        handleComponent={() => <View style={{minHeight: 20}} />}
+        style={{...MAIN_SHADOW}}>
+        <View style={styles.composer}>
+          <MessageComposer
+            client={client}
+            channel={params.channel}
+            onSendCallback={() => {
+              handlePress();
+            }}
+          />
+        </View>
+      </BottomSheet>
     </SafeAreaView>
   );
 };

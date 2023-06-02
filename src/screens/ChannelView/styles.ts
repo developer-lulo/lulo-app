@@ -15,13 +15,18 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   content: {
-    height: '90%',
     padding: 20,
+    height: '40%',
+    maxHeight: '40%',
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
   },
   contentContainer: {
     backgroundColor: MAIN_APP_COLOR_TINT,
-    borderRadius: 20,
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
     ...MAIN_SHADOW,
+    height: '100%',
   },
   loader: {
     height: '70%',
@@ -32,10 +37,11 @@ export default StyleSheet.create({
   },
   composer: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    height: '20%',
+    flex: 1,
     paddingHorizontal: 20,
+    marginVertical: 10,
   },
   deleteChannelStyles: {
     ...MAIN_INPUT_STYLE,

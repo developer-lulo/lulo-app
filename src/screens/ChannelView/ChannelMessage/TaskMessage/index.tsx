@@ -7,7 +7,7 @@ import {
   Message,
 } from '../../../../gql/types';
 
-import {Dimensions} from 'react-native';
+import {Dimensions, TouchableOpacity} from 'react-native';
 
 import {
   confettiPosition,
@@ -29,6 +29,7 @@ import TaskMessageAction, {
   TaskMessageActionProps,
 } from './TaskMessageAction';
 import {DELETE_TASK_ICON} from '../../../../constants';
+import {useNavigation} from '@react-navigation/native';
 
 const TEXT_MAX_LENGTH = 45;
 
@@ -62,6 +63,8 @@ const uncheckButton: Pick<TaskMessageActionProps, 'colors'> = {
 };
 
 const TaskMessage = ({message, client}: TaskMessageProps) => {
+  const navigation = useNavigation();
+
   const {text} = message;
 
   const [messageStatus, setMessageStatus] = useState<ChannelMessageStatus>(
@@ -155,11 +158,25 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
 
   return (
     <View style={getCardStyles()}>
-      <Text style={getTextStyles()}>
-        {text && text.length > TEXT_MAX_LENGTH
-          ? text.substring(0, TEXT_MAX_LENGTH - 3) + '...'
-          : text}
-      </Text>
+      <TouchableOpacity
+        style={{
+          flex: 1,
+          padding: 7,
+        }}
+        onPress={() => {
+          navigation.navigate(
+            'MessageTaskView' as never,
+            {
+              message,
+            } as never,
+          );
+        }}>
+        <Text style={getTextStyles()}>
+          {text && text.length > TEXT_MAX_LENGTH
+            ? text.substring(0, TEXT_MAX_LENGTH - 3) + '...'
+            : text}
+        </Text>
+      </TouchableOpacity>
       <View style={styles.button}>
         {messageStatus === ChannelMessageStatus.Done ? (
           <TaskMessageAction

@@ -17,6 +17,11 @@ export const SEND_MESSAGE_ICON = require('./assets/images/channel-buttons/send.p
 export const TASK_CHECK_ICON = require('./assets/images/channel-buttons/task-check.png');
 export const DELETE_TASK_ICON = require('./assets/images/channel-buttons/delete-task.png');
 
+// action tasks buttons
+
+export const WHATSAPP_ICON = require('./assets/images/messages/tasks/whatsapp.png');
+export const GOOGLE_CALENDAR_ICON = require('./assets/images/messages/tasks/google-calendar.png');
+
 export const MAIN_SHADOW = {
   shadowColor: '#000',
   shadowOffset: {

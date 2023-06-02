@@ -12,6 +12,7 @@ import UserSettingsView from './screens/UserSettingsView';
 import {isLoading, isSignedIn} from './services/GlobalVarService';
 import TestView from './screens/TestView';
 import {TEST_MODE} from './constants';
+import MessageTaskView from './screens/ChannelMessagesViews/MessageTaskView';
 
 interface NavigatorProps {
   client: ApolloClient<any>;
@@ -65,6 +66,13 @@ const Navigator = ({client}: NavigatorProps) => {
                   presentation: 'card',
                 }}>
                 {(props: any) => <ChannelView client={client} {...props} />}
+              </RootStack.Screen>
+              <RootStack.Screen
+                name="MessageTaskView"
+                options={{
+                  presentation: 'modal',
+                }}>
+                {(props: any) => <MessageTaskView client={client} {...props} />}
               </RootStack.Screen>
             </>
           ) : (

@@ -94,12 +94,11 @@ const HomeView = ({navigation, client}: HomeProps) => {
           <View
             style={{
               height: '50%',
-
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <ActivityIndicator color={MAIN_APP_COLOR} size={'large'} />
+            <ActivityIndicator color={MAIN_APP_COLOR} />
           </View>
         ) : (
           <ScrollView style={{backgroundColor: MAIN_APP_COLOR_TINT}}>

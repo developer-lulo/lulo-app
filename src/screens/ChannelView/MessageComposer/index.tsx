@@ -6,14 +6,20 @@ import {Channel, SendMessageInput} from '../../../gql/types';
 import {sendMessageOnChannel} from '../../../services/ChannelService';
 import {ApolloClient} from '@apollo/client';
 import {messages} from '../../../services/GlobalVarService';
-import {MAIN_APP_COLOR, MAIN_GRAY} from '../../../colors';
+import {MAIN_APP_COLOR} from '../../../colors';
+import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
 
 interface MessageComposerProps {
   channel: Channel;
   client: ApolloClient<any>;
+  onSendCallback?: Function;
 }
 
-const MessageComposer = ({channel, client}: MessageComposerProps) => {
+const MessageComposer = ({
+  channel,
+  client,
+  onSendCallback = () => {},
+}: MessageComposerProps) => {
   const [text, setText] = useState<string>('');
 
   const onChangeText = (value: string) => {
@@ -34,18 +40,16 @@ const MessageComposer = ({channel, client}: MessageComposerProps) => {
     const currentMessages = [...messages()];
     messages([...currentMessages, newMessage]);
     setText('');
+    onSendCallback(messageObj);
   };
 
   return (
     <View style={styles.inputContainer}>
-      <TextInput
-        style={{
-          ...styles.textInputStyle,
-        }}
+      <BottomSheetTextInput
+        style={{...styles.textInputStyle}}
         onChangeText={onChangeText}
         value={text}
-        placeholder="Escribe algo..."
-        keyboardType="default"
+        placeholder="Que planeas hacer 🎉"
       />
       <View style={styles.actionsContainer}>
         <TouchableOpacity onPress={sendMessage} style={styles.action}>
