@@ -34,6 +34,7 @@ export default StyleSheet.create({
     flex: 1,
     maxHeight: 200,
     minWidth: '90%',
+    maxWidth: '90%',
     borderRadius: 20,
     borderColor: MAIN_APP_COLOR,
     padding: 20,
