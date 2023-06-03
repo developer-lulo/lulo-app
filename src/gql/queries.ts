@@ -61,6 +61,7 @@ export const CHANNEL_MESSAGES_QUERY = gql`
     channelMessages(channelId: $channelId) {
       id
       text
+      description
       messageType
       messageStatus
       createdAt

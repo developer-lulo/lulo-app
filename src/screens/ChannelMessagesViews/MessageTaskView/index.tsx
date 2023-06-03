@@ -5,15 +5,18 @@ import {
   Image,
   Keyboard,
   Linking,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import {ApolloClient} from '@apollo/client';
-import {Message} from '../../../gql/types';
+import {Message, UpdateMessageBasicInfo} from '../../../gql/types';
 import {useRoute} from '@react-navigation/native';
 import styles from './styles';
 import {GOOGLE_CALENDAR_ICON, WHATSAPP_ICON} from '../../../constants';
 import {TextInput} from 'react-native-gesture-handler';
 import Share from 'react-native-share';
+import {updateMessageBasicInfo} from '../../../services/MessagesService';
+import {messages} from '../../../services/GlobalVarService';
 
 interface MessageTaskViewProps {
   client: ApolloClient<any>;
@@ -59,12 +62,18 @@ ${description}
   },
 ];
 
-const MessageTaskView = ({}: MessageTaskViewProps) => {
+const MessageTaskView = ({client}: MessageTaskViewProps) => {
   const route = useRoute();
   const {message} = route.params as MessageTaskViewParams;
 
-  const [description, setDescription] = useState('');
-  const [text, setText] = useState(message.text || '');
+  console.log(message);
+
+  const [localMessage, setLocalMessage] = useState<Message>(message);
+
+  const [description, setDescription] = useState(
+    localMessage.description || '',
+  );
+  const [text, setText] = useState(localMessage.text || '');
 
   const handleChangeTitle = (value: string) => {
     setText(value);
@@ -74,7 +83,30 @@ const MessageTaskView = ({}: MessageTaskViewProps) => {
     setDescription(value);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const input: UpdateMessageBasicInfo = {
+      messageId: localMessage.id!,
+      text,
+      description,
+    };
+    const updatedMessage: Message | void = await updateMessageBasicInfo(
+      client,
+      input,
+    ).catch(error => {
+      Alert.alert(error.message);
+    });
+
+    if (updatedMessage) {
+      const _messages = [...messages()];
+
+      const index = _messages.findIndex(e => e.id === updatedMessage.id);
+      _messages[index] = updatedMessage;
+
+      setLocalMessage(updatedMessage);
+
+      messages([..._messages]);
+    }
+
     Keyboard.dismiss();
   };
 

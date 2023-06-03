@@ -85,3 +85,21 @@ export const CHANGE_CHANNEL_STATUS = gql`
     }
   }
 `;
+
+export interface UpdateMessageBasicInfoResult {
+  updateMessageBasicInfo: Message;
+}
+
+export const UPDATE_MESSAGE_BASIC_INFO = gql`
+  mutation UpdateMessageBasicInfo($input: UpdateMessageBasicInfo) {
+    updateMessageBasicInfo(input: $input) {
+      id
+      text
+      description
+      messageType
+      messageStatus
+      createdAt
+      updatedAt
+    }
+  }
+`;
