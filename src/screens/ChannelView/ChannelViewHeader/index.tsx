@@ -4,8 +4,8 @@ import {HEADER_BACK_BUTTON} from '../../../constants';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
 import {Channel} from '../../../gql/types';
-import {channels, messages} from '../../../services/GlobalVarService';
-import {MAIN_GREEN_MINT, MAIN_ORANGE} from '../../../colors';
+import {messages, refreshChannels} from '../../../services/GlobalVarService';
+import {MAIN_GREEN_MINT} from '../../../colors';
 
 interface ChannelViewHeaderProps {
   channel: Channel;
@@ -19,8 +19,7 @@ const ChannelViewHeader = (props: ChannelViewHeaderProps) => {
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => {
-          messages([]);
-          channels([]);
+          refreshChannels(true);
           navigation.goBack();
         }}>
         <Image

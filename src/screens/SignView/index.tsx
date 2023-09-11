@@ -3,12 +3,13 @@ import {Alert, Text, TextInput, View, KeyboardAvoidingView} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
-import {MAIN_INPUT_STYLE} from '../../constants';
+import {LULO_BG, MAIN_INPUT_STYLE} from '../../constants';
 import ActionButton from './ActionButton';
 import {isSignedIn, userToken} from '../../services/GlobalVarService';
 import {API_ENDPOINT} from '../../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomeHeader from '../HomeView/HomeHeader';
+import {ImageBackground} from 'react-native';
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
@@ -79,64 +80,68 @@ const SignView = ({navigation, route}: any) => {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={styles.container}>
-      <View style={styles.header}>
-        <HomeHeader />
+    <ImageBackground style={styles.backgroundImage} source={LULO_BG}>
+      <View style={styles.backgroundColor}>
+        <SafeAreaView edges={['top']} style={styles.container}>
+          <View style={styles.header}>
+            <HomeHeader />
+          </View>
+          <KeyboardAvoidingView behavior="padding">
+            <View style={styles.formStyle}>
+              <Text style={styles.title}>
+                {isNewUser ? 'Creemos tu cuenta' : 'Ingresemos para empezar'}
+              </Text>
+              {/* Email Input */}
+              <Text style={styles.labelStyle}> Correo </Text>
+              <TextInput
+                style={MAIN_INPUT_STYLE}
+                onChangeText={onChangeEmail}
+                value={email}
+                placeholder="Ingresa tu correo"
+                keyboardType="email-address"
+              />
+              {!isAValidEmail && !!email ? (
+                <Text style={{...styles.hint, ...styles.errorHint}}>
+                  Debe ser un correo válido{' '}
+                </Text>
+              ) : null}
+              {/* Password Input */}
+              <Text style={{...styles.labelStyle, marginTop: 20}}>
+                {' '}
+                Contraseña{' '}
+              </Text>
+              <TextInput
+                style={MAIN_INPUT_STYLE}
+                onChangeText={onChangePassword}
+                value={password}
+                placeholder="Ingresa tu contraseña"
+                keyboardType="default"
+                textContentType="password"
+                secureTextEntry={true}
+              />
+              {!isAValidPassword && !!password ? (
+                <Text style={{...styles.hint, ...styles.errorHint}}>
+                  Debe tener al menos ocho caracteres
+                </Text>
+              ) : null}
+            </View>
+            <View style={styles.buttonsContainer}>
+              <ActionButton
+                type="back"
+                onPress={() => {
+                  navigation.navigate('NewOrNot');
+                }}
+              />
+              <ActionButton
+                disabled={!isAValidEmail || !isAValidPassword}
+                type="next"
+                onPress={onSubmit}
+              />
+            </View>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
       </View>
-      <KeyboardAvoidingView behavior="padding">
-        <View style={styles.formStyle}>
-          <Text style={styles.title}>
-            {isNewUser ? 'Creemos tu cuenta' : 'Ingresemos para empezar'}
-          </Text>
-          {/* Email Input */}
-          <Text style={styles.labelStyle}> Correo </Text>
-          <TextInput
-            style={MAIN_INPUT_STYLE}
-            onChangeText={onChangeEmail}
-            value={email}
-            placeholder="Ingresa tu correo"
-            keyboardType="email-address"
-          />
-          {!isAValidEmail && !!email ? (
-            <Text style={{...styles.hint, ...styles.errorHint}}>
-              Debe ser un correo válido{' '}
-            </Text>
-          ) : null}
-          {/* Password Input */}
-          <Text style={{...styles.labelStyle, marginTop: 20}}>
-            {' '}
-            Contraseña{' '}
-          </Text>
-          <TextInput
-            style={MAIN_INPUT_STYLE}
-            onChangeText={onChangePassword}
-            value={password}
-            placeholder="Ingresa tu contraseña"
-            keyboardType="default"
-            textContentType="password"
-            secureTextEntry={true}
-          />
-          {!isAValidPassword && !!password ? (
-            <Text style={{...styles.hint, ...styles.errorHint}}>
-              Debe tener al menos ocho caracteres
-            </Text>
-          ) : null}
-        </View>
-        <View style={styles.buttonsContainer}>
-          <ActionButton
-            type="back"
-            onPress={() => {
-              navigation.navigate('NewOrNot');
-            }}
-          />
-          <ActionButton
-            disabled={!isAValidEmail || !isAValidPassword}
-            type="next"
-            onPress={onSubmit}
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ImageBackground>
   );
 };
 

@@ -1,10 +1,15 @@
-import {ApolloClient} from '@apollo/client';
+import {ApolloClient, useReactiveVar} from '@apollo/client';
 import {
   ChangeChannelStatusInput,
   Message,
   SendMessageInput,
 } from '../gql/types';
-import {CHANNEL_MESSAGES_QUERY, ChannelMessagesQueryData} from '../gql/queries';
+import {
+  CHANNEL_MESSAGES_QUERY,
+  ChannelMessagesQueryData,
+  GET_CHANNELS,
+  GetChannelsQueryData,
+} from '../gql/queries';
 import {getContext} from './ApolloService';
 import {Alert} from 'react-native';
 import {
@@ -13,6 +18,8 @@ import {
   SEND_MESSAGE_ON_CHANNEL_MUTATION,
   SendMessageOnChannelResult,
 } from '../gql/mutations';
+import {useEffect, useState} from 'react';
+import {channels, refreshChannels} from './GlobalVarService';
 
 export const getChannelMessages = async (
   client: ApolloClient<any>,
@@ -76,4 +83,49 @@ export const changeChannelStatus = async (
   const channel: ChangeChannelStatusResult = result.data;
 
   return channel.changeChannelStatus;
+};
+
+export const getChannels = async (
+  client: ApolloClient<any>,
+  userId?: string,
+) => {
+  const result = await client.query({
+    query: GET_CHANNELS,
+    context: getContext(),
+    fetchPolicy: 'no-cache',
+    variables: {
+      userId,
+    },
+  });
+
+  if (result.error) {
+    Alert.alert(result.error.message);
+  }
+
+  const userChannels: GetChannelsQueryData = result.data;
+
+  return userChannels;
+};
+
+export const useChannels = (
+  client: ApolloClient<any>,
+  userId: string | undefined | null,
+) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const refreshReactive = useReactiveVar(refreshChannels);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      if (client && userId && refreshReactive) {
+        const result = await getChannels(client, userId);
+        channels(result.userChannels);
+        setIsLoading(false);
+        refreshChannels(false);
+      }
+    };
+
+    fetchDataAsync();
+  }, [client, userId, refreshReactive]);
+
+  return [isLoading];
 };

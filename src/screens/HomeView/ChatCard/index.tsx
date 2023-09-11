@@ -1,11 +1,15 @@
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {Text} from 'react-native';
 import React from 'react';
-import styles from './styles';
 
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
-import {Channel} from '../../../gql/types';
-import {DEFAULT_AVATAR} from '../../../constants';
+import {
+  Channel,
+  ChannelCharacter,
+  ChannelCharacterKey,
+} from '../../../gql/types';
+import PinnapleCard from './PinnapleChatCard';
+import OrangeCard from './OrangeChatCard';
 
 dayjs.extend(calendar);
 export interface Chat {
@@ -16,62 +20,30 @@ export interface Chat {
 }
 
 export interface ChatCardProps {
-  onPress?: Function;
   chat: Channel;
+  onPress?: () => void;
 }
 
-const DEFAULT_VALUES = {
-  image: DEFAULT_AVATAR,
-  title: 'No Named Channel',
-};
+const ChatCard = ({chat, ...props}: ChatCardProps) => {
+  const getChatComponent = (channel: Channel) => {
+    const character: ChannelCharacter | null | undefined =
+      channel.channelCharacter;
 
-const CALENDAR_FORMAT = {
-  sameDay: 'h:mm A', // The same day ( Today at 2:30 AM )
-  lastDay: '[Yesterday]', // The day before ( Yesterday )
-  lastWeek: 'dddd', // Last week ( Last Monday at 2:30 AM )
-  sameElse: 'DD/MM/YYYY', // Everything else ( 17/10/2011 )
-};
+    if (character && character.id) {
+      switch (character.key) {
+        case ChannelCharacterKey.Pinnaple:
+          return <PinnapleCard chat={channel} {...props} />;
 
-const ChatCard = ({chat, onPress}: ChatCardProps) => {
-  const updatedAtDate = new Date(chat.updatedAt || '');
-  const updatedAtByDayjs = dayjs(updatedAtDate);
+        case ChannelCharacterKey.Orange:
+          return <OrangeCard chat={channel} {...props} />;
 
-  const _onPress = () => {
-    if (onPress) {
-      onPress();
+        case ChannelCharacterKey.UnSet:
+          return <></>;
+      }
     }
   };
 
-  return (
-    <TouchableOpacity style={styles.container} onPress={_onPress}>
-      <View style={styles.infoContainer}>
-        <Image
-          style={{...styles.avatar}}
-          source={chat.imageUrl ? {uri: chat.imageUrl} : DEFAULT_VALUES.image}
-        />
-        <View style={styles.chatInfoContainer}>
-          <Text style={styles.title}>
-            {chat.displayName || DEFAULT_VALUES.title}
-          </Text>
-          <Text style={styles.subtitle}>
-            {chat.channelCharacter?.displayName || DEFAULT_VALUES.title}
-          </Text>
-        </View>
-      </View>
-      <View style={styles.extededInfoContainer}>
-        <View>
-          {chat.count ? (
-            <View style={styles.counterBadge}>
-              <Text style={styles.counterBadgeText}>{chat.count}</Text>
-            </View>
-          ) : null}
-        </View>
-        <Text style={styles.date}>
-          {updatedAtByDayjs.calendar(null, CALENDAR_FORMAT)}{' '}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+  return getChatComponent(chat);
 };
 
 export default ChatCard;

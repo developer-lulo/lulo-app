@@ -4,15 +4,11 @@ import {
   CreateChannelMutationResult,
   CREATE_CHANNEL_MUTATION,
 } from '../gql/mutations';
-import {
-  GetInitialValuesQueryData,
-  GetMeQueryData,
-  INIT_QUERY,
-  ME_QUERY,
-} from '../gql/queries';
-import {CreateChannelInput} from '../gql/types';
-import {me} from './GlobalVarService';
+import {GetMeQueryData, ME_QUERY} from '../gql/queries';
+import {ChannelCharacter, CreateChannelInput} from '../gql/types';
+import {characters, me} from './GlobalVarService';
 import {getContext} from './ApolloService';
+import {useEffect, useState} from 'react';
 
 export const getMeQuery = async (client: ApolloClient<any>) => {
   const result = await client.query({
@@ -29,28 +25,6 @@ export const getMeQuery = async (client: ApolloClient<any>) => {
   me(meData.me);
 
   return meData;
-};
-
-export const initValuesQuery = async (
-  client: ApolloClient<any>,
-  userId?: string,
-) => {
-  const result = await client.query({
-    query: INIT_QUERY,
-    context: getContext(),
-    fetchPolicy: 'no-cache',
-    variables: {
-      userId,
-    },
-  });
-
-  if (result.error) {
-    Alert.alert(result.error.message);
-  }
-
-  const initData: GetInitialValuesQueryData = result.data;
-
-  return initData;
 };
 
 export const createChannel = async (
@@ -72,4 +46,24 @@ export const createChannel = async (
   const channelCreated: CreateChannelMutationResult = result.data;
 
   return channelCreated.createChannel;
+};
+
+export const useMe = (client: ApolloClient<any>) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      if (client) {
+        const data = await getMeQuery(client);
+        me(data.me);
+        characters(data.me.availableChannelCharacters as ChannelCharacter[]);
+
+        setIsLoading(false);
+      }
+    };
+
+    fetchDataAsync();
+  }, [client]);
+
+  return [isLoading];
 };

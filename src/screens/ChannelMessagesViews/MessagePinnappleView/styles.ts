@@ -13,9 +13,11 @@ import {
 } from '../../../constants';
 
 export default StyleSheet.create({
-  container: {
+  scrollView: {
     backgroundColor: MAIN_APP_COLOR_TINT,
     flex: 1,
+  },
+  container: {
     display: 'flex',
     alignItems: 'center',
   },
@@ -84,8 +86,10 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     ...MAIN_SHADOW_LOW,
+    backgroundColor: MAIN_APP_COLOR,
   },
   saveButtonText: {
     fontFamily: MAIN_FONT_FAMILY,
+    color: MAIN_WHITE,
   },
 });

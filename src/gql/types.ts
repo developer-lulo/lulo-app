@@ -45,13 +45,26 @@ export type Channel = {
 
 export type ChannelCharacter = {
   __typename?: 'ChannelCharacter';
+  action?: Maybe<ChannelCharacterAction>;
   createdAt?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   displayName: Scalars['String'];
   id: Scalars['String'];
   imageUrl: Scalars['String'];
+  key?: Maybe<ChannelCharacterKey>;
   updatedAt?: Maybe<Scalars['String']>;
 };
+
+export enum ChannelCharacterAction {
+  ActiveNInactive = 'ACTIVE_N_INACTIVE',
+  CreateNew = 'CREATE_NEW',
+}
+
+export enum ChannelCharacterKey {
+  Orange = 'ORANGE',
+  Pinnaple = 'PINNAPLE',
+  UnSet = 'UN_SET',
+}
 
 export enum ChannelMessageStatus {
   Done = 'DONE',
@@ -86,12 +99,19 @@ export type Message = {
   updatedAt?: Maybe<Scalars['String']>;
 };
 
+export type MoveMessageToChannelInput = {
+  messageId: Scalars['String'];
+  newChannelId: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   changeChannelStatus?: Maybe<Channel>;
   changeMessageStatus?: Maybe<Message>;
   createChannel?: Maybe<Channel>;
+  moveMessageToChannel?: Maybe<Message>;
   sendMessageOnChannel?: Maybe<Message>;
+  updateChannelImage?: Maybe<Channel>;
   updateMessageBasicInfo?: Maybe<Message>;
 };
 
@@ -107,8 +127,16 @@ export type MutationCreateChannelArgs = {
   input?: InputMaybe<CreateChannelInput>;
 };
 
+export type MutationMoveMessageToChannelArgs = {
+  input?: InputMaybe<MoveMessageToChannelInput>;
+};
+
 export type MutationSendMessageOnChannelArgs = {
   input?: InputMaybe<SendMessageInput>;
+};
+
+export type MutationUpdateChannelImageArgs = {
+  input?: InputMaybe<UpdateChannelImageInput>;
 };
 
 export type MutationUpdateMessageBasicInfoArgs = {
@@ -165,6 +193,11 @@ export type Token = {
   __typename?: 'Token';
   token: Scalars['String'];
   user?: Maybe<User>;
+};
+
+export type UpdateChannelImageInput = {
+  channelId: Scalars['String'];
+  newImageUrl: Scalars['String'];
 };
 
 export type UpdateMessageBasicInfo = {
@@ -297,12 +330,15 @@ export type ResolversTypes = {
   ChangeMessageStatusInput: ChangeMessageStatusInput;
   Channel: ResolverTypeWrapper<Channel>;
   ChannelCharacter: ResolverTypeWrapper<ChannelCharacter>;
+  ChannelCharacterAction: ChannelCharacterAction;
+  ChannelCharacterKey: ChannelCharacterKey;
   ChannelMessageStatus: ChannelMessageStatus;
   ChannelMessageType: ChannelMessageType;
   ChannelStatus: ChannelStatus;
   CreateChannelInput: CreateChannelInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Message: ResolverTypeWrapper<Message>;
+  MoveMessageToChannelInput: MoveMessageToChannelInput;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   SendMessageInput: SendMessageInput;
@@ -310,6 +346,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Subscription: ResolverTypeWrapper<{}>;
   Token: ResolverTypeWrapper<Token>;
+  UpdateChannelImageInput: UpdateChannelImageInput;
   UpdateMessageBasicInfo: UpdateMessageBasicInfo;
   User: ResolverTypeWrapper<User>;
 };
@@ -324,6 +361,7 @@ export type ResolversParentTypes = {
   CreateChannelInput: CreateChannelInput;
   Int: Scalars['Int'];
   Message: Message;
+  MoveMessageToChannelInput: MoveMessageToChannelInput;
   Mutation: {};
   Query: {};
   SendMessageInput: SendMessageInput;
@@ -331,6 +369,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Subscription: {};
   Token: Token;
+  UpdateChannelImageInput: UpdateChannelImageInput;
   UpdateMessageBasicInfo: UpdateMessageBasicInfo;
   User: User;
 };
@@ -379,6 +418,11 @@ export type ChannelCharacterResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ChannelCharacter'] = ResolversParentTypes['ChannelCharacter'],
 > = {
+  action?: Resolver<
+    Maybe<ResolversTypes['ChannelCharacterAction']>,
+    ParentType,
+    ContextType
+  >;
   createdAt?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -388,6 +432,11 @@ export type ChannelCharacterResolvers<
   displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   imageUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  key?: Resolver<
+    Maybe<ResolversTypes['ChannelCharacterKey']>,
+    ParentType,
+    ContextType
+  >;
   updatedAt?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -452,11 +501,23 @@ export type MutationResolvers<
     ContextType,
     Partial<MutationCreateChannelArgs>
   >;
+  moveMessageToChannel?: Resolver<
+    Maybe<ResolversTypes['Message']>,
+    ParentType,
+    ContextType,
+    Partial<MutationMoveMessageToChannelArgs>
+  >;
   sendMessageOnChannel?: Resolver<
     Maybe<ResolversTypes['Message']>,
     ParentType,
     ContextType,
     Partial<MutationSendMessageOnChannelArgs>
+  >;
+  updateChannelImage?: Resolver<
+    Maybe<ResolversTypes['Channel']>,
+    ParentType,
+    ContextType,
+    Partial<MutationUpdateChannelImageArgs>
   >;
   updateMessageBasicInfo?: Resolver<
     Maybe<ResolversTypes['Message']>,

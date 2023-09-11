@@ -14,10 +14,11 @@ export const me = makeVar<User | undefined>(undefined);
 
 // app props
 export const channels = makeVar<Channel[]>([]);
+export const refreshChannels = makeVar<boolean>(true);
 export const characters = makeVar<ChannelCharacter[]>([]);
-
-// channel props
+export const refreshCharacters = makeVar<boolean>(true);
 export const messages = makeVar<Message[]>([]);
+export const refreshMessages = makeVar<boolean>(true);
 
 // functionalities
 

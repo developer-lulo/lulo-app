@@ -62,5 +62,7 @@ export default StyleSheet.create({
   date: {
     fontFamily: MAIN_FONT_FAMILY,
     color: MAIN_GRAY,
+    marginRight: 5,
+    fontSize: 12,
   },
 });

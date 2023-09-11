@@ -1,5 +1,6 @@
 import {gql} from '@apollo/client';
-import {Channel, ChannelCharacter, Message, User} from './types';
+import {Channel, Message, User} from './types';
+import {CHANNEL_CHARACTER_FRAGMENT} from './fragments';
 
 // Me Query and its interface
 export interface GetMeQueryData {
@@ -15,25 +16,20 @@ export const ME_QUERY = gql`
       avatar
       updatedAt
       createdAt
+      availableChannelCharacters {
+        ...CharactersFragment
+      }
     }
   }
+  ${CHANNEL_CHARACTER_FRAGMENT}
 `;
 
 // Init query and its interface
-export interface GetInitialValuesQueryData {
-  channelCharacters: [ChannelCharacter];
+export interface GetChannelsQueryData {
   userChannels: [Channel];
 }
-export const INIT_QUERY = gql`
-  query GetInitialValuesQuery($userId: String!) {
-    channelCharacters {
-      id
-      displayName
-      imageUrl
-      description
-      updatedAt
-      createdAt
-    }
+export const GET_CHANNELS = gql`
+  query getChannelsQuery($userId: String!) {
     userChannels(userId: $userId) {
       id
       displayName
@@ -42,15 +38,11 @@ export const INIT_QUERY = gql`
       updatedAt
       createdAt
       channelCharacter {
-        id
-        displayName
-        imageUrl
-        description
-        updatedAt
-        createdAt
+        ...CharactersFragment
       }
     }
   }
+  ${CHANNEL_CHARACTER_FRAGMENT}
 `;
 
 export interface ChannelMessagesQueryData {

@@ -103,3 +103,20 @@ export const UPDATE_MESSAGE_BASIC_INFO = gql`
     }
   }
 `;
+
+export interface MoveMessageToChannelResult {
+  moveMessageToChannel: Message;
+}
+export const MOVE_MESSAGE_TO_CHANNEL = gql`
+  mutation MoveMessageToChannel($input: MoveMessageToChannelInput) {
+    moveMessageToChannel(input: $input) {
+      id
+      text
+      description
+      messageType
+      messageStatus
+      createdAt
+      updatedAt
+    }
+  }
+`;

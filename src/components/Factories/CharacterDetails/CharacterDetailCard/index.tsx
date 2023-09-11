@@ -1,8 +1,9 @@
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Text, View} from 'react-native';
 import React from 'react';
 import styles from './styles';
-import {useNavigation} from '@react-navigation/native';
-import {ChannelCharacter} from '../../../gql/types';
+import {ChannelCharacter, ChannelCharacterAction} from '../../../../gql/types';
+import CreateNew from './Actions/CreateNew';
+import ActiveAndInactive from './Actions/ActiveAndInactive';
 
 export interface CharacterDetailCardProps {
   character?: ChannelCharacter;
@@ -15,8 +16,18 @@ const DEFAULT_VALUES = {
   description: 'You may select a character to start',
 };
 
+const getActionComponent = (character: ChannelCharacter) => {
+  if (character && character.id) {
+    switch (character.action) {
+      case ChannelCharacterAction.CreateNew:
+        return <CreateNew character={character} />;
+      case ChannelCharacterAction.ActiveNInactive:
+        return <ActiveAndInactive character={character} />;
+    }
+  }
+};
+
 const CharacterDetailCard = ({character}: CharacterDetailCardProps) => {
-  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.datailsContainer}>
@@ -37,21 +48,7 @@ const CharacterDetailCard = ({character}: CharacterDetailCardProps) => {
           </Text>
         </View>
         <View style={styles.actionsContainer}>
-          {character?.id ? (
-            <TouchableOpacity
-              style={styles.createChannelButton}
-              onPress={() => {
-                navigation.navigate(
-                  'CreateChannel' as never,
-                  {
-                    characterId: character?.id,
-                    characterImage: character?.imageUrl,
-                  } as never,
-                );
-              }}>
-              <Text style={styles.iconStyle}> Crear Nuevo </Text>
-            </TouchableOpacity>
-          ) : null}
+          {getActionComponent(character!)}
         </View>
       </View>
     </View>

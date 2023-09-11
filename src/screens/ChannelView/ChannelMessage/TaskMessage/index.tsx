@@ -165,7 +165,7 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
         }}
         onPress={() => {
           navigation.navigate(
-            'MessageTaskView' as never,
+            'MessagePinnappleView' as never,
             {
               message,
             } as never,

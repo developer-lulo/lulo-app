@@ -19,8 +19,12 @@ export const DELETE_TASK_ICON = require('./assets/images/channel-buttons/delete-
 
 // action tasks buttons
 
-export const WHATSAPP_ICON = require('./assets/images/messages/tasks/whatsapp.png');
-export const GOOGLE_CALENDAR_ICON = require('./assets/images/messages/tasks/google-calendar.png');
+export const WHATSAPP_ICON = require('./assets/images/messages/pinnapple/whatsapp.png');
+export const GOOGLE_CALENDAR_ICON = require('./assets/images/messages/pinnapple/google-calendar.png');
+export const ORANGE_ICON = require('./assets/images/messages/pinnapple/naranja.png');
+
+export const JUICE_IMAGE = require('./assets/images/system/juice.png');
+export const LULO_BG = require('./assets/images/system/lulo-bg.png');
 
 export const MAIN_SHADOW = {
   shadowColor: '#000',

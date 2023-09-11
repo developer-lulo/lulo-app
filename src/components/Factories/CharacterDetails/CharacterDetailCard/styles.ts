@@ -1,10 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_GRAY, MAIN_GREEN_MINT, MAIN_WHITE, MAIN_WHITE_ALPHA} from '../../../colors';
+import {
+  MAIN_GRAY,
+  MAIN_GREEN_MINT,
+  MAIN_WHITE,
+  MAIN_WHITE_ALPHA,
+} from '../../../../colors';
 import {
   DASHED_BORDER_WIDTH,
   MAIN_FONT_FAMILY,
   MAIN_SHADOW,
-} from '../../../constants';
+} from '../../../../constants';
 
 export default StyleSheet.create({
   container: {

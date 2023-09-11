@@ -3,8 +3,15 @@ import {MAIN_APP_COLOR, MAIN_TITLES_COLOR, MAIN_BAD_RED} from '../../colors';
 import {MAIN_FONT_FAMILY} from '../../constants';
 
 export default StyleSheet.create({
-  container: {
+  backgroundImage: {
     backgroundColor: MAIN_APP_COLOR,
+    flex: 1,
+  },
+  backgroundColor: {
+    backgroundColor: `${MAIN_APP_COLOR}aa`,
+    flex: 1,
+  },
+  container: {
     flex: 1,
   },
   header: {

@@ -23,12 +23,13 @@ import {
 } from '../../services/ChannelService';
 import ChannelMessage from './ChannelMessage';
 import MessageComposer from './MessageComposer';
-import {messages} from '../../services/GlobalVarService';
+import {messages, refreshChannels} from '../../services/GlobalVarService';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {channels} from '../../services/GlobalVarService';
 import {MAIN_APP_COLOR, MAIN_WHITE} from '../../colors';
 import BottomSheet from '@gorhom/bottom-sheet';
-import {MAIN_SHADOW} from '../../constants';
+import {LULO_BG, MAIN_SHADOW} from '../../constants';
+import {ImageBackground} from 'react-native';
 
 enum KeyboardStates {
   isOpened = 'open',
@@ -119,12 +120,11 @@ const ChannelView = ({client}: ChannelViewProps) => {
       channelStatus: ChannelStatus.Stored,
     };
 
-    await changeChannelStatus(client, input);
+    await changeChannelStatus(client, input).catch(error => {
+      Alert.alert(error.message);
+    });
 
-    let _channels = [...channels()];
-    _channels = _channels.filter(c => c.id !== params.channel.id);
-    channels([..._channels]);
-
+    refreshChannels(true);
     navigation.goBack();
   };
 
@@ -136,63 +136,67 @@ const ChannelView = ({client}: ChannelViewProps) => {
 
   // renders
   return (
-    <SafeAreaView edges={['top']} style={styles.container}>
-      <View style={styles.header}>
-        <ChannelViewHeader channel={params.channel} />
-      </View>
-      <View style={styles.contentContainer}>
-        {isLoading ? (
-          <View style={styles.content}>
-            <ActivityIndicator color={MAIN_APP_COLOR} />
+    <ImageBackground style={styles.backgroundImage} source={LULO_BG}>
+      <View style={styles.backgroundColor}>
+        <SafeAreaView edges={['top']} style={styles.container}>
+          <View style={styles.header}>
+            <ChannelViewHeader channel={params.channel} />
           </View>
-        ) : (
-          <ScrollView
-            style={{
-              ...styles.content,
-              ...contentHeightByKeyboardState[isKeyboardOpened],
-            }}
-            ref={scrollViewRef}>
-            {messagesReactive.length! ? (
-              messagesReactive.map(message => (
-                <ChannelMessage
-                  key={message.id}
-                  message={message}
-                  client={client}
-                />
-              ))
+          <View style={styles.contentContainer}>
+            {isLoading ? (
+              <View style={styles.content}>
+                <ActivityIndicator color={MAIN_APP_COLOR} />
+              </View>
             ) : (
-              <TouchableOpacity
-                onPress={handleDeleteChat}
-                style={styles.deleteChannelStyles}>
-                <Text style={styles.deleteTextStyle}> Eliminar Chat</Text>
-              </TouchableOpacity>
+              <ScrollView
+                style={{
+                  ...styles.content,
+                  ...contentHeightByKeyboardState[isKeyboardOpened],
+                }}
+                ref={scrollViewRef}>
+                {messagesReactive.length! ? (
+                  messagesReactive.map(message => (
+                    <ChannelMessage
+                      key={message.id}
+                      message={message}
+                      client={client}
+                    />
+                  ))
+                ) : (
+                  <TouchableOpacity
+                    onPress={handleDeleteChat}
+                    style={styles.deleteChannelStyles}>
+                    <Text style={styles.deleteTextStyle}> Eliminar Chat</Text>
+                  </TouchableOpacity>
+                )}
+                {/* Space to the last item to show it well */}
+                <View style={{minHeight: 200}} />
+              </ScrollView>
             )}
-            {/* Space to the last item to show it well */}
-            <View style={{minHeight: 200}} />
-          </ScrollView>
-        )}
+          </View>
+          <BottomSheet
+            backgroundStyle={{backgroundColor: MAIN_WHITE}}
+            ref={bottomSheetRef}
+            index={0}
+            snapPoints={snapPoints}
+            keyboardBehavior="interactive"
+            keyboardBlurBehavior="restore"
+            enableHandlePanningGesture={false}
+            handleComponent={() => <View style={{minHeight: 20}} />}
+            style={{...MAIN_SHADOW}}>
+            <View style={styles.composer}>
+              <MessageComposer
+                client={client}
+                channel={params.channel}
+                onSendCallback={() => {
+                  handlePress();
+                }}
+              />
+            </View>
+          </BottomSheet>
+        </SafeAreaView>
       </View>
-      <BottomSheet
-        backgroundStyle={{backgroundColor: MAIN_WHITE}}
-        ref={bottomSheetRef}
-        index={0}
-        snapPoints={snapPoints}
-        keyboardBehavior="interactive"
-        keyboardBlurBehavior="restore"
-        enableHandlePanningGesture={false}
-        handleComponent={() => <View style={{minHeight: 20}} />}
-        style={{...MAIN_SHADOW}}>
-        <View style={styles.composer}>
-          <MessageComposer
-            client={client}
-            channel={params.channel}
-            onSendCallback={() => {
-              handlePress();
-            }}
-          />
-        </View>
-      </BottomSheet>
-    </SafeAreaView>
+    </ImageBackground>
   );
 };
 
