@@ -3,7 +3,7 @@ import {makeVar} from '@apollo/client';
 import {Channel, ChannelCharacter, Message, User} from '../gql/types';
 
 export const isSignedIn = makeVar<boolean>(true);
-export const isUsingLocalDB = makeVar<boolean>(false);
+export const isUsingLocalDB = makeVar<boolean>(true);
 
 // loading screen
 export const isLoading = makeVar<boolean>(true);

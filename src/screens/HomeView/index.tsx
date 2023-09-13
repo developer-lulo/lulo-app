@@ -29,7 +29,7 @@ const HomeView = () => {
 
   useEffect(() => {
     const asyncInit = async () => {
-      // await syncToLocal();
+      await syncToLocal();
     };
     asyncInit();
   });
