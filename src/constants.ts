@@ -1,5 +1,5 @@
 import {MAIN_GRAY} from './colors';
-
+import {ChannelCharacterAction, ChannelCharacterKey} from './gql/types';
 export const DASHED_BORDER_WIDTH = 3;
 
 export const MAIN_FONT_FAMILY = 'Poppins-Regular';
@@ -59,3 +59,27 @@ export const MAIN_INPUT_STYLE = {
 };
 
 export const TEST_MODE = false;
+
+export const CHARACTERS = [
+  // Keep it always as the first one
+  {
+    action: ChannelCharacterAction.ActiveNInactive,
+    description:
+      '¡Hola! ¡Soy Naranja! yo te ayudaré a gestionar tus tareas diarias. Cada recordatorio es un pequeño gesto de cariño, cada tarea, una oportunidad de crecimiento!',
+    display_name: 'Naranja',
+    id: '2e141826-04e7-46e6-a078-1ef33512f842',
+    image_url:
+      'https://storage.googleapis.com/lulo-380819.appspot.com/public/aa82df60-1e23-442a-8f19-7fa4c900eb54-naranja.png',
+    key: ChannelCharacterKey.Orange,
+  },
+  {
+    action: ChannelCharacterAction.CreateNew,
+    description:
+      '¡Hola! ¡Soy Piñita! Estoy aquí para ayudarte con la creación y gestión de tus tareas y proyectos personales. Juntos, podemos organizar listas de tareas  ¡Juntos, podemos hacer grandes cosas! ¡Cuenta conmigo!',
+    display_name: 'Piñita',
+    id: '14d0e85d-4374-4932-80a8-b72b9390fb3d',
+    image_url:
+      'https://storage.googleapis.com/lulo-380819.appspot.com/public/25333842-e447-452d-9627-20d915ccb4c5-pina.png',
+    key: ChannelCharacterKey.Pinnaple,
+  },
+];

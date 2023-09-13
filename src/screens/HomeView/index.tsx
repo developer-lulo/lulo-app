@@ -6,28 +6,35 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import styles from './styles';
 import CharacterCard from './CharacterCard';
 import {ScrollView} from 'react-native-gesture-handler';
-import CharacterDetailCard from '../../components/Factories/CharacterDetails/CharacterDetailCard';
 import {LULO_BG, MAIN_SHADOW} from '../../constants';
 import ChatCard from './ChatCard';
 import {ChannelCharacter} from '../../gql/types';
-import {ApolloClient, useReactiveVar} from '@apollo/client';
+import {useReactiveVar} from '@apollo/client';
 import {useMe} from '../../services/UserService';
 import {channels, characters, me} from '../../services/GlobalVarService';
 import {MAIN_APP_COLOR, MAIN_APP_COLOR_TINT} from '../../colors';
 import {ActivityIndicator} from 'react-native';
 import {useChannels} from '../../services/ChannelService';
 import CharacterDetailsFactory from '../../components/Factories/CharacterDetails';
+import {useBulkSyncToLocalScript} from '../../services/SyncService';
+import {useNavigation} from '@react-navigation/native';
 
-interface HomeProps {
-  client: ApolloClient<any>;
-  navigation: any;
-}
-
-const HomeView = ({navigation, client}: HomeProps) => {
-  // bottom sheet needed
+const HomeView = () => {
+  const navigation = useNavigation();
+  // // bottom sheet needed
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['20%', '75%'], []);
 
+  const {syncToLocal} = useBulkSyncToLocalScript();
+
+  useEffect(() => {
+    const asyncInit = async () => {
+      // await syncToLocal();
+    };
+    asyncInit();
+  });
+
+  console.log('rendering HomeView');
   const [openChats, setOpenChats] = useState(1);
   const [characterSelected, setCharacterSelected] = useState<
     ChannelCharacter | undefined
@@ -40,8 +47,8 @@ const HomeView = ({navigation, client}: HomeProps) => {
 
   const $me = useReactiveVar(me);
 
-  const [meIsLoading] = useMe(client);
-  const [channelsAreLoading] = useChannels(client, $me?.id);
+  const [meIsLoading] = useMe();
+  const [channelsAreLoading] = useChannels($me?.id);
 
   // renders
   return (
@@ -51,18 +58,20 @@ const HomeView = ({navigation, client}: HomeProps) => {
           <View style={styles.header}>
             <HomeHeader navigation={navigation} />
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {charactersReactive.map((c, index) => (
-                <CharacterCard
-                  key={index}
-                  character={c}
-                  onPress={() => {
-                    openChats === 1 ? setOpenChats(0) : setOpenChats(1);
-                    openChats === 1
-                      ? setCharacterSelected(c)
-                      : setCharacterSelected(undefined);
-                  }}
-                />
-              ))}
+              {charactersReactive.map((c, index) => {
+                return (
+                  <CharacterCard
+                    key={index}
+                    character={c}
+                    onPress={() => {
+                      openChats === 1 ? setOpenChats(0) : setOpenChats(1);
+                      openChats === 1
+                        ? setCharacterSelected(c)
+                        : setCharacterSelected(undefined);
+                    }}
+                  />
+                );
+              })}
             </ScrollView>
           </View>
 

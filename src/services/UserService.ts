@@ -1,14 +1,11 @@
-import {ApolloClient} from '@apollo/client';
+import {ApolloClient, useApolloClient, useReactiveVar} from '@apollo/client';
 import {Alert} from 'react-native';
-import {
-  CreateChannelMutationResult,
-  CREATE_CHANNEL_MUTATION,
-} from '../gql/mutations';
 import {GetMeQueryData, ME_QUERY} from '../gql/queries';
-import {ChannelCharacter, CreateChannelInput} from '../gql/types';
-import {characters, me} from './GlobalVarService';
+import {ChannelCharacter} from '../gql/types';
+import {characters, isUsingLocalDB, me} from './GlobalVarService';
 import {getContext} from './ApolloService';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
+import {useLocalDbMethods} from './SQLiteService';
 
 export const getMeQuery = async (client: ApolloClient<any>) => {
   const result = await client.query({
@@ -27,43 +24,34 @@ export const getMeQuery = async (client: ApolloClient<any>) => {
   return meData;
 };
 
-export const createChannel = async (
-  client: ApolloClient<any>,
-  input: CreateChannelInput,
-) => {
-  const result = await client.mutate({
-    mutation: CREATE_CHANNEL_MUTATION,
-    variables: {
-      input,
-    },
-    context: getContext(),
-  });
-
-  if (result.errors) {
-    Alert.alert(result.errors[0].message);
-  }
-
-  const channelCreated: CreateChannelMutationResult = result.data;
-
-  return channelCreated.createChannel;
-};
-
-export const useMe = (client: ApolloClient<any>) => {
+export const useMe = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const $isUsingLocalDB = useReactiveVar(isUsingLocalDB);
+  const {localGetMe} = useLocalDbMethods();
+  const client = useApolloClient();
+
+  const setData = (data: GetMeQueryData) => {
+    me(data.me);
+    characters(data.me.availableChannelCharacters as ChannelCharacter[]);
+    setIsLoading(false);
+  };
+
+  const fetchDataLocal = useCallback(async () => {
+    const data = await localGetMe();
+    setData(data);
+  }, [localGetMe]);
+
+  const fetchDataAsync = useCallback(async () => {
+    if (client) {
+      const data = await getMeQuery(client);
+      setData(data);
+    }
+  }, [client]);
 
   useEffect(() => {
-    const fetchDataAsync = async () => {
-      if (client) {
-        const data = await getMeQuery(client);
-        me(data.me);
-        characters(data.me.availableChannelCharacters as ChannelCharacter[]);
-
-        setIsLoading(false);
-      }
-    };
-
-    fetchDataAsync();
-  }, [client]);
+    $isUsingLocalDB ? fetchDataLocal() : fetchDataAsync();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [$isUsingLocalDB]);
 
   return [isLoading];
 };

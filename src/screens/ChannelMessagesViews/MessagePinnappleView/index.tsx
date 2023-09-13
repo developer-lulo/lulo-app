@@ -15,7 +15,10 @@ import styles from './styles';
 import {GOOGLE_CALENDAR_ICON, WHATSAPP_ICON} from '../../../constants';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import Share from 'react-native-share';
-import {updateMessageBasicInfo} from '../../../services/MessagesService';
+import {
+  updateMessageBasicInfo,
+  useMessagesMutations,
+} from '../../../services/MessagesService';
 import {characters, messages} from '../../../services/GlobalVarService';
 
 interface MessagePinnappleViewProps {
@@ -69,6 +72,8 @@ const MessagePinnappleView = ({client}: MessagePinnappleViewProps) => {
   const [localMessage, setLocalMessage] = useState<Message>(message);
   const [isSaving, setIsSaving] = useState(false);
 
+  const {updateBasicInfo} = useMessagesMutations();
+
   const navigation = useNavigation();
 
   const [description, setDescription] = useState(
@@ -93,12 +98,11 @@ const MessagePinnappleView = ({client}: MessagePinnappleViewProps) => {
       text,
       description,
     };
-    const updatedMessage: Message | void = await updateMessageBasicInfo(
-      client,
-      input,
-    ).catch(error => {
-      Alert.alert(error.message);
-    });
+    const updatedMessage: Message | void = await updateBasicInfo(input).catch(
+      error => {
+        Alert.alert(error.message);
+      },
+    );
 
     if (updatedMessage) {
       const _messages = [...messages()];

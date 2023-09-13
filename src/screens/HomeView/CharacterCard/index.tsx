@@ -10,7 +10,6 @@ export interface CharacterCardProps {
 }
 
 const CharacterCard = ({character, onPress}: CharacterCardProps) => {
-  // if (!character.isAvailable) {
   if (!character) {
     return (
       <View style={styles.container}>

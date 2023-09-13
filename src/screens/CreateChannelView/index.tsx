@@ -3,9 +3,12 @@ import React, {useState} from 'react';
 import styles from './styles';
 import {ApolloClient} from '@apollo/client';
 import {CreateChannelInput} from '../../gql/types';
-import {channels, me, refreshChannels} from '../../services/GlobalVarService';
+import {me, refreshChannels} from '../../services/GlobalVarService';
 
-import {createChannel} from '../../services/UserService';
+import {
+  createChannel,
+  useChannelsMutations,
+} from '../../services/ChannelService';
 import ActionButton from '../SignView/ActionButton';
 import {MAIN_INPUT_STYLE} from '../../constants';
 
@@ -28,6 +31,8 @@ const CreateChannelView = ({client, navigation}: CreateChannelViewProps) => {
   const route = useRoute();
   const params: RouteParams = route.params as RouteParams;
 
+  const {createNewChannel} = useChannelsMutations();
+
   const onSubmit = async () => {
     const input: CreateChannelInput = {
       channelCharacterId: params.characterId,
@@ -36,11 +41,15 @@ const CreateChannelView = ({client, navigation}: CreateChannelViewProps) => {
       userChannelsIds: [meId!],
     };
 
-    await createChannel(client, input).catch(e => {
+    const channel = await createNewChannel(input).catch(e => {
       Alert.alert('Error', e.message);
     });
     refreshChannels(true);
+
     navigation.goBack();
+    navigation.navigate('ChannelView', {
+      channel,
+    });
   };
 
   const onChangeName = (value: string) => {

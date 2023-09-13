@@ -5,12 +5,13 @@ import {isSignedIn} from '../../services/GlobalVarService';
 
 import styles from './styles';
 import {MAIN_BAD_RED, MAIN_GRAY} from '../../colors';
+import packageJson from '../../../package.json';
 
 const UserSettingsView = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.item}
           onPress={() => {
             AsyncStorage.clear().then(_ => {
@@ -20,7 +21,7 @@ const UserSettingsView = ({navigation}: any) => {
           <Text style={{...styles.optionText, ...{color: MAIN_GRAY}}}>
             Cerrar sesión
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.item}
           onPress={() => {
@@ -30,6 +31,14 @@ const UserSettingsView = ({navigation}: any) => {
             Cancelar
           </Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.body} />
+      <View style={styles.footer}>
+        <Text style={styles.nameStyle}>Felipe Mantilla</Text>
+        <Text style={styles.textStyle}>felipemantillagomez@gmail.com</Text>
+        <Text style={styles.textStyle}>developer@lulo.love</Text>
+        <Text style={styles.textStyle}> </Text>
+        <Text style={styles.textStyle}>Lulo {packageJson.version}</Text>
       </View>
     </View>
   );

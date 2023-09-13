@@ -1,14 +1,30 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_FONT_FAMILY_BOLD} from '../../constants';
+import {MAIN_FONT_FAMILY, MAIN_FONT_FAMILY_BOLD} from '../../constants';
 import {MAIN_APP_COLOR, MAIN_APP_COLOR_TINT} from '../../colors';
 
 export default StyleSheet.create({
   container: {
     backgroundColor: MAIN_APP_COLOR_TINT,
     flex: 1,
+    display: 'flex',
   },
   header: {
-    height: '10%',
+    flex: 1,
+  },
+  body: {
+    flex: 8,
+  },
+  footer: {
+    display: 'flex',
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nameStyle: {
+    fontFamily: MAIN_FONT_FAMILY_BOLD,
+  },
+  textStyle: {
+    fontFamily: MAIN_FONT_FAMILY,
   },
   item: {
     width: 'auto',

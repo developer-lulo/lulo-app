@@ -1,6 +1,7 @@
-import {ApolloClient, useReactiveVar} from '@apollo/client';
+import {ApolloClient, useApolloClient, useReactiveVar} from '@apollo/client';
 import {
   ChangeChannelStatusInput,
+  CreateChannelInput,
   Message,
   SendMessageInput,
 } from '../gql/types';
@@ -14,12 +15,15 @@ import {getContext} from './ApolloService';
 import {Alert} from 'react-native';
 import {
   CHANGE_CHANNEL_STATUS,
+  CREATE_CHANNEL_MUTATION,
   ChangeChannelStatusResult,
+  CreateChannelMutationResult,
   SEND_MESSAGE_ON_CHANNEL_MUTATION,
   SendMessageOnChannelResult,
 } from '../gql/mutations';
-import {useEffect, useState} from 'react';
-import {channels, refreshChannels} from './GlobalVarService';
+import {useCallback, useEffect, useState} from 'react';
+import {channels, isUsingLocalDB, refreshChannels} from './GlobalVarService';
+import {useLocalDbMethods} from './SQLiteService';
 
 export const getChannelMessages = async (
   client: ApolloClient<any>,
@@ -107,25 +111,102 @@ export const getChannels = async (
   return userChannels;
 };
 
-export const useChannels = (
+export const createChannel = async (
   client: ApolloClient<any>,
-  userId: string | undefined | null,
+  input: CreateChannelInput,
 ) => {
+  const result = await client.mutate({
+    mutation: CREATE_CHANNEL_MUTATION,
+    variables: {
+      input,
+    },
+    context: getContext(),
+  });
+
+  if (result.errors) {
+    Alert.alert(result.errors[0].message);
+  }
+
+  const channelCreated: CreateChannelMutationResult = result.data;
+
+  return channelCreated.createChannel;
+};
+
+export const useChannels = (userId: string | undefined | null) => {
+  const client = useApolloClient();
   const [isLoading, setIsLoading] = useState(true);
-  const refreshReactive = useReactiveVar(refreshChannels);
+  const {localGetChannels} = useLocalDbMethods();
+  const $refresh = useReactiveVar(refreshChannels);
+  const $isUsingLocalDB = useReactiveVar(isUsingLocalDB);
+
+  const setData = (data: GetChannelsQueryData) => {
+    channels(data.userChannels);
+    setIsLoading(false);
+    refreshChannels(false);
+  };
+
+  const fetchDataLocal = useCallback(async () => {
+    const data = await localGetChannels(userId);
+    setData(data);
+  }, [localGetChannels, userId]);
+
+  const fetchDataAsync = useCallback(async () => {
+    if (client && userId && $refresh) {
+      const result = await getChannels(client, userId);
+      setData(result);
+    }
+  }, [client, userId, $refresh]);
 
   useEffect(() => {
-    const fetchDataAsync = async () => {
-      if (client && userId && refreshReactive) {
-        const result = await getChannels(client, userId);
-        channels(result.userChannels);
-        setIsLoading(false);
-        refreshChannels(false);
-      }
-    };
-
-    fetchDataAsync();
-  }, [client, userId, refreshReactive]);
+    $isUsingLocalDB ? fetchDataLocal() : fetchDataAsync();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, $refresh]);
 
   return [isLoading];
+};
+
+export const useChannelsMutations = () => {
+  const client = useApolloClient();
+  const $isUsingLocalDB = useReactiveVar(isUsingLocalDB);
+  const {
+    localSendMessageOnChannel,
+    localChangeChannelStatus,
+    localCreateChannel,
+  } = useLocalDbMethods();
+
+  const sendMessage = useCallback(
+    async (input: SendMessageInput) => {
+      const result = $isUsingLocalDB
+        ? await localSendMessageOnChannel(input)
+        : await sendMessageOnChannel(client, input);
+      return result;
+    },
+    [$isUsingLocalDB, client, localSendMessageOnChannel],
+  );
+
+  const changeStatus = useCallback(
+    async (input: ChangeChannelStatusInput) => {
+      const result = $isUsingLocalDB
+        ? await localChangeChannelStatus(input)
+        : await changeChannelStatus(client, input);
+      return result;
+    },
+    [$isUsingLocalDB, client, localChangeChannelStatus],
+  );
+
+  const createNewChannel = useCallback(
+    async (input: CreateChannelInput) => {
+      const result = $isUsingLocalDB
+        ? await localCreateChannel(input)
+        : await createChannel(client, input);
+      return result;
+    },
+    [$isUsingLocalDB, client, localCreateChannel],
+  );
+
+  return {
+    sendMessage,
+    changeStatus,
+    createNewChannel,
+  };
 };

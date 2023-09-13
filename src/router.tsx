@@ -26,7 +26,18 @@ const Navigator = ({client}: NavigatorProps) => {
   const isLoadingReactive = useReactiveVar(isLoading);
 
   if (TEST_MODE) {
-    return <TestView client={client} />;
+    return (
+      <NavigationContainer>
+        <RootStack.Navigator
+          screenOptions={{
+            headerShown: false,
+            presentation: 'modal',
+          }}>
+          <RootStack.Screen name="Home" component={HomeView} />
+        </RootStack.Navigator>
+      </NavigationContainer>
+    );
+    // return <TestView client={client} />;
   }
 
   return (
@@ -41,9 +52,7 @@ const Navigator = ({client}: NavigatorProps) => {
           }}>
           {isSignedInReactive ? (
             <>
-              <RootStack.Screen name="Home">
-                {(props: any) => <HomeView client={client} {...props} />}
-              </RootStack.Screen>
+              <RootStack.Screen name="Home" component={HomeView} />
               <RootStack.Screen
                 name="UserSettings"
                 component={UserSettingsView}
@@ -88,6 +97,7 @@ const Navigator = ({client}: NavigatorProps) => {
               </RootStack.Screen>
             </>
           ) : (
+            // Unused by the local approach, (removed by now but maybe in the future)
             <>
               <RootStack.Screen name="NewOrNot" component={NewOrNotView} />
               <RootStack.Screen

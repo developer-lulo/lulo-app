@@ -13,20 +13,20 @@ import {
 } from '../../../gql/types';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {View} from 'react-native-animatable';
-import {moveMessageToChannel} from '../../../services/MessagesService';
-
-interface MoveToChannelViewProps {
-  client: ApolloClient<any>;
-}
+import {
+  moveMessageToChannel,
+  useMessagesMutations,
+} from '../../../services/MessagesService';
 
 interface MoveToChannelViewParams {
   character: ChannelCharacter;
   message: Message;
 }
 
-const MoveToChannelView = ({client}: MoveToChannelViewProps) => {
+const MoveToChannelView = () => {
   const route = useRoute();
   const params = route.params as MoveToChannelViewParams;
+  const {moveToChannel} = useMessagesMutations();
 
   const navigation = useNavigation();
 
@@ -39,7 +39,7 @@ const MoveToChannelView = ({client}: MoveToChannelViewProps) => {
         newChannelId: channel.id,
       };
 
-      const result = await moveMessageToChannel(client, input).catch(err => {
+      const result = await moveToChannel(input).catch(err => {
         Alert.alert('Error', err.message);
       });
 

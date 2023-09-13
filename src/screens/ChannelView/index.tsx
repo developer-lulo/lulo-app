@@ -1,4 +1,4 @@
-import React, {createRef, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   ScrollView,
@@ -17,19 +17,22 @@ import {
 import {ApolloClient, useReactiveVar} from '@apollo/client';
 import ChannelViewHeader from './ChannelViewHeader';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {
-  changeChannelStatus,
-  getChannelMessages,
-} from '../../services/ChannelService';
+import {useChannelsMutations} from '../../services/ChannelService';
 import ChannelMessage from './ChannelMessage';
 import MessageComposer from './MessageComposer';
 import {messages, refreshChannels} from '../../services/GlobalVarService';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {channels} from '../../services/GlobalVarService';
-import {MAIN_APP_COLOR, MAIN_WHITE} from '../../colors';
+
+import {
+  MAIN_APP_COLOR,
+  MAIN_APP_COLOR_TINT,
+  MAIN_ORANGE,
+  MAIN_WHITE,
+} from '../../colors';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {LULO_BG, MAIN_SHADOW} from '../../constants';
 import {ImageBackground} from 'react-native';
+import {useMessages} from '../../services/MessagesService';
 
 enum KeyboardStates {
   isOpened = 'open',
@@ -60,14 +63,16 @@ const ChannelView = ({client}: ChannelViewProps) => {
   const route = useRoute();
   const params = route.params as ChannelViewParams;
 
+  const {changeStatus} = useChannelsMutations();
   const messagesReactive = useReactiveVar(messages);
 
-  const [isLoading, setIsLoading] = useState(true);
   const [isKeyboardOpened, setIsKeyboardOpened] = useState<KeyboardStates>(
     KeyboardStates.isClosed,
   );
 
   const navigation = useNavigation();
+
+  const [isLoading] = useMessages(params.channel.id);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -88,24 +93,6 @@ const ChannelView = ({client}: ChannelViewProps) => {
     };
   }, []);
 
-  useEffect(() => {
-    const initComponentAsync = async () => {
-      if (client) {
-        const data = await getChannelMessages(client, params.channel.id).catch(
-          error => {
-            Alert.alert(error.message);
-            navigation.goBack();
-          },
-        );
-        if (data) {
-          messages(data);
-          setIsLoading(false);
-        }
-      }
-    };
-    initComponentAsync();
-  }, [client, params, navigation]);
-
   const scrollViewRef = useRef();
 
   const handlePress = () => {
@@ -120,7 +107,7 @@ const ChannelView = ({client}: ChannelViewProps) => {
       channelStatus: ChannelStatus.Stored,
     };
 
-    await changeChannelStatus(client, input).catch(error => {
+    await changeStatus(input).catch(error => {
       Alert.alert(error.message);
     });
 
@@ -132,7 +119,7 @@ const ChannelView = ({client}: ChannelViewProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   // variables
-  const snapPoints = useMemo(() => ['15%'], []);
+  const snapPoints = useMemo(() => ['10%'], []);
 
   // renders
   return (
@@ -175,15 +162,15 @@ const ChannelView = ({client}: ChannelViewProps) => {
             )}
           </View>
           <BottomSheet
-            backgroundStyle={{backgroundColor: MAIN_WHITE}}
+            backgroundStyle={styles.bottomSheetBackground}
             ref={bottomSheetRef}
             index={0}
             snapPoints={snapPoints}
             keyboardBehavior="interactive"
             keyboardBlurBehavior="restore"
             enableHandlePanningGesture={false}
-            handleComponent={() => <View style={{minHeight: 20}} />}
-            style={{...MAIN_SHADOW}}>
+            handleComponent={() => <View style={{minHeight: 0}} />}
+            style={{}}>
             <View style={styles.composer}>
               <MessageComposer
                 client={client}

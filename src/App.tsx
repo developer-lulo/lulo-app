@@ -12,14 +12,19 @@ import SplashScreen from 'react-native-splash-screen';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Confetti from './components/Confetti/Index';
+import 'react-native-get-random-values';
+import {useLocalDBSetup} from './services/SQLiteService';
 
 const App = () => {
+  const {initLocalDb} = useLocalDBSetup();
+
   useEffect(() => {
     async function init() {
+      await initLocalDb();
       SplashScreen.hide();
       setTimeout(() => {
         isLoading(false);
-      }, 1000);
+      }, 200);
 
       const token = await AsyncStorage.getItem('token');
       if (token) {
@@ -29,7 +34,7 @@ const App = () => {
     }
 
     init();
-  }, []);
+  }, [initLocalDb]);
 
   // renders
   return (

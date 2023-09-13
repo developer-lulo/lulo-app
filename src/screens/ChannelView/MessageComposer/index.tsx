@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import styles from './styles';
 import {SEND_MESSAGE_ICON} from '../../../constants';
 import {Channel, SendMessageInput} from '../../../gql/types';
-import {sendMessageOnChannel} from '../../../services/ChannelService';
+import {useChannelsMutations} from '../../../services/ChannelService';
 import {ApolloClient} from '@apollo/client';
 import {messages} from '../../../services/GlobalVarService';
 import {MAIN_APP_COLOR} from '../../../colors';
@@ -21,12 +21,13 @@ const MessageComposer = ({
   onSendCallback = () => {},
 }: MessageComposerProps) => {
   const [text, setText] = useState<string>('');
+  const {sendMessage} = useChannelsMutations();
 
   const onChangeText = (value: string) => {
     setText(value);
   };
 
-  const sendMessage = async () => {
+  const _sendMessage = async () => {
     if (text === '') {
       return;
     }
@@ -36,7 +37,7 @@ const MessageComposer = ({
       text: text,
     };
 
-    const newMessage = await sendMessageOnChannel(client, messageObj);
+    const newMessage = await sendMessage(messageObj);
     const currentMessages = [...messages()];
     messages([...currentMessages, newMessage]);
     setText('');
@@ -52,7 +53,7 @@ const MessageComposer = ({
         placeholder="Que planeas hacer 🎉"
       />
       <View style={styles.actionsContainer}>
-        <TouchableOpacity onPress={sendMessage} style={styles.action}>
+        <TouchableOpacity onPress={_sendMessage} style={styles.action}>
           <Image
             source={SEND_MESSAGE_ICON}
             style={{tintColor: MAIN_APP_COLOR}}
