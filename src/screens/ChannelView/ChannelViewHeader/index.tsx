@@ -5,7 +5,7 @@ import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
 import {Channel} from '../../../gql/types';
 import {messages, refreshChannels} from '../../../services/GlobalVarService';
-import {MAIN_GREEN_MINT} from '../../../colors';
+import {MAIN_GREEN_MINT, MAIN_ORANGE_TINT} from '../../../colors';
 
 interface ChannelViewHeaderProps {
   channel: Channel;
@@ -24,7 +24,7 @@ const ChannelViewHeader = (props: ChannelViewHeaderProps) => {
         }}>
         <Image
           source={HEADER_BACK_BUTTON}
-          style={{tintColor: MAIN_GREEN_MINT}}
+          style={{tintColor: MAIN_ORANGE_TINT}}
         />
       </TouchableOpacity>
       <TouchableOpacity style={styles.channelInfoContainer}>
