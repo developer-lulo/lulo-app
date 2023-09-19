@@ -22,7 +22,10 @@ import {
   MAIN_WHITE_ALPHA,
 } from '../../../../colors';
 import {ApolloClient} from '@apollo/client';
-import {changeMessageStatus} from '../../../../services/MessagesService';
+import {
+  changeMessageStatus,
+  useMessagesMutations,
+} from '../../../../services/MessagesService';
 
 import TaskMessageAction, {
   TaskMessageActionOnPressEvent,
@@ -64,6 +67,7 @@ const uncheckButton: Pick<TaskMessageActionProps, 'colors'> = {
 
 const TaskMessage = ({message, client}: TaskMessageProps) => {
   const navigation = useNavigation();
+  const {changeStatus} = useMessagesMutations();
 
   const {text} = message;
 
@@ -113,11 +117,9 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
       messageId: message.id!,
       messageStatus: ChannelMessageStatus.Done,
     };
-    const updatedMessage = await changeMessageStatus(client, input).catch(
-      error => {
-        Alert.alert(error.message);
-      },
-    );
+    const updatedMessage = await changeStatus(input).catch(error => {
+      Alert.alert(error.message);
+    });
 
     if (updatedMessage && updatedMessage.messageStatus) {
       setMessageStatus(updatedMessage.messageStatus);
@@ -132,11 +134,9 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
       messageId: message.id!,
       messageStatus: ChannelMessageStatus.Pending,
     };
-    const updatedMessage = await changeMessageStatus(client, input).catch(
-      error => {
-        Alert.alert(error.message);
-      },
-    );
+    const updatedMessage = await changeStatus(input).catch(error => {
+      Alert.alert(error.message);
+    });
     if (updatedMessage && updatedMessage.messageStatus) {
       setMessageStatus(updatedMessage.messageStatus);
     }
@@ -148,7 +148,7 @@ const TaskMessage = ({message, client}: TaskMessageProps) => {
       messageId: message.id!,
       messageStatus: ChannelMessageStatus.Stored,
     };
-    await changeMessageStatus(client, input).catch(error => {
+    await changeStatus(input).catch(error => {
       Alert.alert(error.message);
     });
 

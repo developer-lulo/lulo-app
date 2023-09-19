@@ -37,6 +37,7 @@ export const GET_CHANNELS = gql`
       count
       updatedAt
       createdAt
+      channelCharacterId
       channelCharacter {
         ...CharactersFragment
       }

@@ -2,12 +2,14 @@ import {StyleSheet} from 'react-native';
 import {
   MAIN_GRAY,
   MAIN_GREEN_MINT,
+  MAIN_ORANGE_TINT,
   MAIN_WHITE,
   MAIN_WHITE_ALPHA,
 } from '../../../../colors';
 import {
   DASHED_BORDER_WIDTH,
   MAIN_FONT_FAMILY,
+  MAIN_FONT_FAMILY_BOLD,
   MAIN_SHADOW,
 } from '../../../../constants';
 
@@ -25,48 +27,46 @@ export default StyleSheet.create({
     borderWidth: DASHED_BORDER_WIDTH,
     borderStyle: 'dashed',
     borderRadius: 20,
-    borderColor: MAIN_GREEN_MINT,
+    borderColor: `${MAIN_GRAY}88`,
     backgroundColor: MAIN_WHITE_ALPHA,
   },
   infoContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     padding: 10,
+    alignItems: 'center',
     justifyContent: 'space-between',
-    height: '60%',
-    maxHeight: '60%',
+    height: '70%',
+    maxHeight: '70%',
   },
   avatar: {
-    width: 130,
-    height: 130,
+    width: 100,
+    height: 100,
     borderRadius: 100,
-    borderWidth: 5,
-    borderColor: MAIN_WHITE,
+    ...MAIN_SHADOW,
   },
   name: {
-    fontSize: 20,
-    color: MAIN_GRAY,
-    fontFamily: MAIN_FONT_FAMILY,
+    fontSize: 40,
+    color: MAIN_ORANGE_TINT,
+    fontFamily: MAIN_FONT_FAMILY_BOLD,
     textAlign: 'center',
   },
   basicInfo: {
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    maxWidth: '40%',
   },
   description: {
     color: MAIN_GRAY,
     fontFamily: MAIN_FONT_FAMILY,
-    maxWidth: '60%',
+    fontSize: 16,
     textAlign: 'center',
   },
   actionsContainer: {
     paddingHorizontal: 20,
     display: 'flex',
     justifyContent: 'center',
-
-    height: '40%',
+    height: '30%',
   },
   createChannelButton: {
     height: 60,

@@ -3,6 +3,7 @@ import {
   MAIN_APP_COLOR,
   MAIN_GRAY,
   MAIN_GREEN_MINT,
+  MAIN_TITLES_COLOR,
   MAIN_WHITE,
   MAIN_WHITE_ALPHA,
 } from '../../../colors';
@@ -22,7 +23,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     margin: 5,
     marginHorizontal: 15,
-    ...MAIN_SHADOW,
+    // ...MAIN_SHADOW,
   },
   unavailableCharacter: {
     width: CHARACTER_AVATAR_SIZE,
@@ -37,9 +38,11 @@ export default StyleSheet.create({
     width: CHARACTER_AVATAR_SIZE,
     height: CHARACTER_AVATAR_SIZE,
     borderRadius: 50,
+    ...MAIN_SHADOW,
   },
   name: {
-    fontFamily: MAIN_FONT_FAMILY_BOLD,
-    color: MAIN_GREEN_MINT,
+    fontFamily: MAIN_FONT_FAMILY,
+    color: MAIN_TITLES_COLOR,
+    fontSize: 17,
   },
 });

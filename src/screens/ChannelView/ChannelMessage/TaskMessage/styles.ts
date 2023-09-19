@@ -12,7 +12,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    ...MAIN_SHADOW_LOW,
+    // ...MAIN_SHADOW_LOW,
   },
   text: {
     color: MAIN_GRAY,

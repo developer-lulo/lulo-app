@@ -1,6 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {MAIN_TITLES_COLOR} from '../../../colors';
-import {MAIN_FONT_FAMILY, MAIN_SHADOW} from '../../../constants';
+import {
+  MAIN_FONT_FAMILY,
+  MAIN_FONT_FAMILY_BOLD,
+  MAIN_SHADOW,
+} from '../../../constants';
 
 export default StyleSheet.create({
   container: {
@@ -15,11 +19,11 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: MAIN_FONT_FAMILY_BOLD,
     color: MAIN_TITLES_COLOR,
   },
   subtitle: {
-    fontSize: 15,
+    fontSize: 17,
     fontFamily: MAIN_FONT_FAMILY,
     color: MAIN_TITLES_COLOR,
   },

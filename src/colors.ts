@@ -13,5 +13,5 @@ export const MAIN_BAD_RED = '#DF0000';
 // global used vars
 
 export const MAIN_APP_COLOR = MAIN_ORANGE;
-export const MAIN_TITLES_COLOR = MAIN_GREEN_MINT;
+export const MAIN_TITLES_COLOR = MAIN_ORANGE_TINT;
 export const MAIN_APP_COLOR_TINT = MAIN_ORANGE_TINT;

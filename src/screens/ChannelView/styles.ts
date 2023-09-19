@@ -1,5 +1,11 @@
 import {StyleSheet} from 'react-native';
-import {MAIN_APP_COLOR, MAIN_APP_COLOR_TINT, MAIN_BAD_RED} from '../../colors';
+import {
+  MAIN_APP_COLOR,
+  MAIN_APP_COLOR_TINT,
+  MAIN_BAD_RED,
+  MAIN_ORANGE,
+  MAIN_WHITE,
+} from '../../colors';
 import {MAIN_FONT_FAMILY, MAIN_INPUT_STYLE, MAIN_SHADOW} from '../../constants';
 
 export default StyleSheet.create({
@@ -44,11 +50,11 @@ export default StyleSheet.create({
   },
   composer: {
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    paddingHorizontal: 20,
-    marginVertical: 10,
+    paddingHorizontal: 15,
+    // backgroundColor: MAIN_WHITE,
   },
   deleteChannelStyles: {
     ...MAIN_INPUT_STYLE,
@@ -57,5 +63,8 @@ export default StyleSheet.create({
     color: MAIN_BAD_RED,
     textAlign: 'center',
     fontFamily: MAIN_FONT_FAMILY,
+  },
+  bottomSheetBackground: {
+    backgroundColor: `${MAIN_WHITE}00`, // transparent
   },
 });
