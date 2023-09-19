@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {ImageBackground, View} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import HomeHeader from './HomeHeader';
@@ -16,7 +16,6 @@ import {MAIN_APP_COLOR, MAIN_APP_COLOR_TINT} from '../../colors';
 import {ActivityIndicator} from 'react-native';
 import {useChannels} from '../../services/ChannelService';
 import CharacterDetailsFactory from '../../components/Factories/CharacterDetails';
-import {useBulkSyncToLocalScript} from '../../services/SyncService';
 import {useNavigation} from '@react-navigation/native';
 
 const HomeView = () => {
@@ -25,14 +24,19 @@ const HomeView = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['20%', '75%'], []);
 
-  const {syncToLocal} = useBulkSyncToLocalScript();
-
-  useEffect(() => {
-    const asyncInit = async () => {
-      await syncToLocal();
-    };
-    asyncInit();
-  });
+  /**
+   * it was used to get all cloud info an save it into local db
+   * */
+  // const {syncToLocal} = useBulkSyncToLocalScript();
+  // useEffect(() => {
+  //   const asyncInit = async () => {
+  //     await syncToLocal();
+  //   };
+  //   asyncInit();
+  // });
+  /**
+   * end of sync
+   */
 
   console.log('rendering HomeView');
   const [openChats, setOpenChats] = useState(1);
