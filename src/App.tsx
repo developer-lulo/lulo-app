@@ -14,27 +14,56 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Confetti from './components/Confetti/Index';
 import 'react-native-get-random-values';
 import {useLocalDBSetup} from './services/SQLiteService';
+import {
+  localNotificationService,
+  useBadgeCount,
+} from './services/LocalNotificationService';
 
 const App = () => {
   const {initLocalDb} = useLocalDBSetup();
 
+  // badge count updated by orange messages
+  useBadgeCount();
+
   useEffect(() => {
     async function init() {
+      // initialize local db, create tables if not exist
       await initLocalDb();
-      SplashScreen.hide();
-      setTimeout(() => {
-        isLoading(false);
-      }, 1000);
 
+      // hide splash screen
+      SplashScreen.hide();
+
+      /** -------------------------
+       * Notifications Manager
+       * -------------------------
+       */
+
+      // initialize local notification service, based on Notifee
+      await localNotificationService.initialize();
+
+      /** -------------------------
+       * Notifications Manager End
+       * -------------------------
+       */
+
+      // check if user is signed in, Currently deprecated by local db
       const token = await AsyncStorage.getItem('token');
       if (token) {
         isSignedIn(true);
         userToken(token);
       }
+
+      // set loading to false, just to keep a bit of delay
+      setTimeout(() => {
+        isLoading(false);
+      }, 500);
     }
 
     init();
-  }, [initLocalDb]);
+
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // renders
   return (
