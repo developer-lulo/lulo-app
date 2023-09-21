@@ -16,7 +16,12 @@ import {UPDATE_MESSAGE_BASIC_INFO} from '../gql/mutations';
 import {UpdateMessageBasicInfoResult} from '../gql/mutations';
 import {useCallback, useEffect, useState} from 'react';
 import {useLocalDbMethods} from './SQLiteService';
-import {isUsingLocalDB, messages, refreshMessages} from './GlobalVarService';
+import {
+  isUsingLocalDB,
+  messages,
+  refreshChannels,
+  refreshMessages,
+} from './GlobalVarService';
 import {getChannelMessages} from './ChannelService';
 
 export const changeMessageStatus = async (
@@ -130,6 +135,9 @@ export const useMessagesMutations = () => {
       const result = $isUsingLocalDB
         ? await localUpdateMessageStatus(input)
         : await changeMessageStatus(client, input);
+
+      refreshChannels(true);
+
       return result;
     },
     [client, localUpdateMessageStatus, $isUsingLocalDB],
